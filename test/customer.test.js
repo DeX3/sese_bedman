@@ -18,8 +18,6 @@ describe( "Customer API", function() {
         done();
     } );
 
-    throw new Error( "fail!" );
-
     beforeEach( function( done ) {
         //delete all Customers in the database
         Customer.query().del().then( done.bind( null, null ) );
