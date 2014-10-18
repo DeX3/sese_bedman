@@ -20,7 +20,6 @@ app.controller( "CustomerEditCtrl",
     }
 
     $scope.save = function() {
-        console.log( "Saving..." );
         $scope.customer.$save();
     };
 } );

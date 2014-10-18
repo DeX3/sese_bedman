@@ -33,9 +33,9 @@ install the frontEnd deps as well:
 
 ## Database stuff
 
-Did I mention that bedman is backed by a MySQL database (actually, a lot of
-databases should work, but we'll stick to MySQL here). If you haven't already,
-go ahead and install a mysql server on your machine.
+Bedman is backed by a MySQL database (actually, a lot of databases should work,
+but we'll stick to MySQL here). If you haven't already, go ahead and install a
+mysql server on your machine.
 
 It's best if you create a user and database(s) that bedman can use just for
 itself. You should create 3 databases - one for each environment (check the
