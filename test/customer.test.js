@@ -65,6 +65,7 @@ describe( "Customer API", function() {
                 if( err ) { throw err; }
 
                 res.body.should.have.property( fieldName );
+                throw new Error( "this will make the build fail" );
 
                 done();
             } );
