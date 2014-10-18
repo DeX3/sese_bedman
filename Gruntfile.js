@@ -48,8 +48,13 @@ module.exports = function( grunt ) {
                 script: "app.js"
             },
 			development: { options: { node_env: "development" }	},
-            test: { options: { node_env: "test" } },
-            production: { options: { node_env: "production" } }
+            production: { options: { node_env: "production" } },
+            test: {
+                options: {
+                    node_env: "test",
+                    output: "Listening on port.*"
+                }
+            },
 		},
         env: {
             options: {},
