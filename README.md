@@ -22,6 +22,7 @@ features, you should also `npm install` the following node packages globally
 (you have to install them globally so that their executables get added to your
 `$PATH`):
 
+    npm install
     npm install -g grunt-cli    # for the grunt-executable
     npm install -g bower        # for the bower-executable
 
