@@ -1,0 +1,28 @@
+{
+  "name": "bedman",
+  "version": "0.0.0",
+  "homepage": "https://github.com/DeX3/bedman",
+  "authors": [
+    "Roman Decker <roman.decker@gmail.com>"
+  ],
+  "description": "Basic template for various express projects",
+  "main": "app.js",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.0",
+    "bootstrap": "~3.2.0",
+    "angular-route": "~1.3.0",
+    "angular-resource": "~1.3.0"
+  }
+}

@@ -1,0 +1,19 @@
+<h1>Customer list</h1>
+
+<li ng-show="customers.length" ng-repeat="customer in customers">
+    <ul>
+        <a href="#/customers/{{customer.id}}">
+            {{customer.firstName}} {{customer.lastName}}
+        </a>
+    </ul>
+</li>
+
+<p ng-hide="customers.length">
+    No customers available!
+</p>
+
+<a href="#/customers/create">Create a new customer</a>
+
+<pre class="debug">
+    {{ customers | json }}
+</pre>
