@@ -7,16 +7,16 @@ require( "colors" );
 require( "string.prototype.endswith" );
 
 module.exports.setup = function( app ) {
-	var files = fs.readdirSync( __dirname );
+    var files = fs.readdirSync( __dirname );
 
-	files.filter( function(file) {
-		return file.endsWith(".js") && file !== path.basename( __filename );
-	} ).forEach( function( file ) {
+    files.filter( function(file) {
+        return file.endsWith(".js") && file !== path.basename( __filename );
+    } ).forEach( function( file ) {
 
         console.log( "Setting up controller", file.green );
-		var controller = require( "./" + file );
-		var name = file.substring( 0, file.length - path.extname(file).length );
+        var controller = require( "./" + file );
+        var name = file.substring( 0, file.length - path.extname(file).length );
 
-		module.exports[name] = controller.setup( app );
-	} );
+        module.exports[name] = controller.setup( app );
+    } );
 };

@@ -13,7 +13,7 @@ module.exports.setup = function( app ) {
 
     var router = express.Router();
     var controllers = app.get( "controllers" );
-	
+    
     app.use( "/public", express.static(path.join(__dirname, "public")) );
 
     app.get( "/", function( req, res ) {
