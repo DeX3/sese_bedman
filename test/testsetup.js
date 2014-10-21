@@ -5,7 +5,6 @@ var config = require( "config" );
 var knex = require( "knex" )( config.get("db") ); 
 var bookshelf = require( "bookshelf" )( knex );
 var models = require( "../app/models/models" );
-var controllers = require( "../app/controllers/controllers" );
 
 var testdata = require( "./testdata" );
 
@@ -20,12 +19,10 @@ var mockApp = {
 };
 
 models.setup( mockApp );
-controllers.setup( mockApp );
 
 module.exports = {
     app: mockApp,
     models: models,
-    controllers: controllers,
-    appUrl: "http://localhost:3000",
+    appUrl: "http://localhost:" + (config.get("port") || 3000),
     testData: testdata.withModels( models )
 };

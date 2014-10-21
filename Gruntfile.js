@@ -5,29 +5,33 @@
 
 module.exports = function( grunt ) {
 
-	grunt.loadNpmTasks( "grunt-express-server" );
-	grunt.loadNpmTasks( "grunt-contrib-watch" );
-	grunt.loadNpmTasks( "grunt-contrib-jshint" );
-	grunt.loadNpmTasks( "grunt-mocha-test" );
+    grunt.loadNpmTasks( "grunt-express-server" );
+    grunt.loadNpmTasks( "grunt-contrib-watch" );
+    grunt.loadNpmTasks( "grunt-contrib-jshint" );
+    grunt.loadNpmTasks( "grunt-contrib-clean" );
+    grunt.loadNpmTasks( "grunt-mocha-test" );
+    grunt.loadNpmTasks( "grunt-curl" );
+    grunt.loadNpmTasks( "grunt-zip" );
     grunt.loadNpmTasks( "grunt-jsdoc" );
     grunt.loadNpmTasks( "grunt-env" );
     grunt.loadNpmTasks( "grunt-knex-migrate" );
+    grunt.loadNpmTasks( "grunt-open" );
 
-	grunt.initConfig( {
-		watch: {
+    grunt.initConfig( {
+        watch: {
             /* 
              * Takes care of restarting the express server when a file is
              * changed. Note that restarting the server will trigger linting as
              * well.
              */
-			express: {
-				files: ["app.js",
-						"app/*.js",
-						"app/models/*.js",
+            express: {
+                files: ["app.js",
+                        "app/*.js",
+                        "app/models/*.js",
                         "app/controllers/*.js"],
-				tasks: ["lint", "express:development"],
-				options: { spawn: false }
-			},
+                tasks: ["lint", "express:development"],
+                options: { spawn: false }
+            },
             public: {
                 files: ["app/views/**/*.html",
                         "app/views/**/*.ejs",
@@ -36,18 +40,18 @@ module.exports = function( grunt ) {
                         "app/public/**/*.js"],
                 options: { livereload: true }
             }
-		},
-		express: {
+        },
+        express: {
             /* 
              * Starts server in environment according to sub-task.
              * express:development for development environment,
              * express:test for test environment and
              * express:production for production.
              */
-			options: {
+            options: {
                 script: "app.js"
             },
-			development: { options: { node_env: "development" }	},
+            development: { options: { node_env: "development" }    },
             production: { options: { node_env: "production" } },
             test: {
                 options: {
@@ -55,12 +59,13 @@ module.exports = function( grunt ) {
                     output: "Listening on port.*"
                 }
             },
-		},
+        },
         env: {
             options: {},
             development: { NODE_ENV: "development" },
             test: { NODE_ENV: "test" },
             production: { NODE_ENV: "production" },
+            coverage: { COVERAGE: "true" }
         },
         knexmigrate: {
             config: function( cb ) {
@@ -88,7 +93,8 @@ module.exports = function( grunt ) {
         jshint: {
             all: ["app.js",
                   "app/**/*.js",
-                  "test/**/*.js"],
+                  "test/**/*.js",
+                  "!test/coverage/**/*.js"],
             options: {
                 ignores: ["node_modules/**/*",
                           "app/public/bower_components/**/*"
@@ -102,6 +108,22 @@ module.exports = function( grunt ) {
                 src: ["test/**/*.test.js"]
             }
         },
+        curl: {
+            coverage: {
+                dest: "test/reports/coverage.zip",
+                src: "http://localhost:3001/coverage/download"
+            }
+        },
+        unzip: {
+            coverage: {
+                dest: "test/reports/",
+                src: "test/reports/coverage.zip"
+            }
+        },
+        clean: {
+            coverageZip: ["test/reports/coverage.zip"],
+            doc: ["doc/**/*"]
+        },
         jsdoc: {
             dist: {
                 src: ["app.js",
@@ -112,8 +134,13 @@ module.exports = function( grunt ) {
                     destination: "doc"
                 }
             }
+        },
+        open: {
+            coverage: {
+                path: "test/reports/lcov-report/index.html"
+            }
         }
-	} );
+    } );
 
     //simple alias
     grunt.registerTask( "lint", "jshint" );
@@ -144,9 +171,17 @@ module.exports = function( grunt ) {
 
 
     //lint once, then start server and watch for changes
-	grunt.registerTask( "server", ["lint", "express:development", "watch"] );
+    grunt.registerTask( "server", ["lint", "express:development", "watch"] );
 
     //start the server in test setup and then run the tests
     grunt.registerTask( "test", ["express:test", "mochaTest"] );
+
+    grunt.registerTask( "test:coverage", ["env:coverage",
+                                          "express:test",
+                                          "mochaTest",
+                                          "curl:coverage",
+                                          "unzip:coverage",
+                                          "clean:coverageZip",
+                                          "open:coverage"] );
 
 };
