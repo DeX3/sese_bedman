@@ -27,8 +27,8 @@ module.exports = function( grunt ) {
             express: {
                 files: ["app.js",
                         "app/*.js",
-                        "app/models/*.js",
-                        "app/controllers/*.js"],
+                        "app/models/**/*.js",
+                        "app/controllers/**/*.js"],
                 tasks: ["lint", "express:development"],
                 options: { spawn: false }
             },
@@ -93,11 +93,11 @@ module.exports = function( grunt ) {
         jshint: {
             all: ["app.js",
                   "app/**/*.js",
-                  "test/**/*.js",
-                  "!test/coverage/**/*.js"],
+                  "test/**/*.js"],
             options: {
                 ignores: ["node_modules/**/*",
-                          "app/public/bower_components/**/*"
+                          "app/public/bower_components/**/*",
+                          "test/reports/**/*.js"
                          ],
                 jshintrc: true
             }
