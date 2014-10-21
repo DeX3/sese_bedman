@@ -12,15 +12,13 @@ if( ["development",
      "production",
      "test"].indexOf( process.env.NODE_ENV ) < 0 ) {
 
-    
     if( process.env.NODE_ENV ) {
         console.log( "Invalid environment " + process.env.NODE_ENV.red );
     }
-    
+
     console.log( "Falling back to " + "development".cyan );
     process.env.NODE_ENV = "development";
 }
-
 
 var express = require( "express" );
 var bodyParser = require( "body-parser" );
@@ -76,6 +74,16 @@ routes.setup( app );
 app.locals.appinfo = {
     environment: process.env.NODE_ENV
 };
+
+if( config.has("additionalMiddleware") ) {
+    var middlewares = config.get( "additionalMiddleware" );
+    for( var route in middlewares ) {
+        if( middlewares.hasOwnProperty(route) ) {
+            var middleware = middlewares[route];
+            app.use( route, middleware );
+        }
+    }
+}
 
 var server = app.listen( 3000, function() {
 	console.log( "Listening on port %d in %s", server.address().port,
