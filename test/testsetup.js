@@ -23,6 +23,6 @@ models.setup( mockApp );
 module.exports = {
     app: mockApp,
     models: models,
-    appUrl: "http://localhost:3000",
+    appUrl: "http://localhost:" + (config.get("port") || 3000),
     testData: testdata.withModels( models )
 };
