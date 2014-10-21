@@ -24,6 +24,7 @@ module.exports = {
             database: "bedman_test"
         }
     },
+    port: 3001
 };
 
 

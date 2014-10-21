@@ -111,7 +111,7 @@ module.exports = function( grunt ) {
         curl: {
             coverage: {
                 dest: "test/reports/coverage.zip",
-                src: "http://localhost:3000/coverage/download"
+                src: "http://localhost:3001/coverage/download"
             }
         },
         unzip: {

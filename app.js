@@ -85,7 +85,8 @@ if( config.has("additionalMiddleware") ) {
     }
 }
 
-var server = app.listen( 3000, function() {
+var port = config.get("port") || 3000;
+var server = app.listen( port, function() {
 	console.log( "Listening on port %d in %s", server.address().port,
                                                process.env.NODE_ENV.cyan );
 } );
