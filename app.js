@@ -48,26 +48,19 @@ app.set( "controllers", controllers );
 app.set( "views", "app/views" );
 app.set( "view engine", "ejs" );
 
-app.locals.ngControllers = fs.readdirSync( "app/public/controllers" )
-                             .filter( function(file) {
-    return file.endsWith(".js");
-} );
-app.locals.ngServices = fs.readdirSync( "app/public/services" )
-                             .filter( function(file) {
-    return file.endsWith(".js");
-} );
-app.locals.ngDirectives = fs.readdirSync( "app/public/directives" )
-                             .filter( function(file) {
-    return file.endsWith(".js");
-} );
-app.locals.ngViews = fs.readdirSync( "app/public/views" )
-                             .filter( function(file) {
-    return file.endsWith(".html");
-} );
-app.locals.ngDirectives = fs.readdirSync( "app/public/directives" )
-                             .filter( function(file) {
-    return file.endsWith(".js");
-} );
+function filesIn( directory, suffix ) {
+    return fs.readdirSync( directory )
+             .filter( function( file ) {
+        return file.endsWith( suffix );
+     } );
+}
+
+app.locals.ngServices = filesIn( "app/public/services", ".js" );
+app.locals.ngControllers = filesIn( "app/public/controllers", ".js" );
+app.locals.ngDirectives = filesIn( "app/public/directives", ".js" );
+app.locals.ngViews = filesIn( "app/public/views", ".html" );
+app.locals.ngDirectives = filesIn( "app/public/directives", ".js" );
+app.locals.ngFilters = filesIn( "app/public/filters", ".js" );
 
 routes.setup( app );
 
