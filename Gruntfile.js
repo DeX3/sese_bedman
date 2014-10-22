@@ -16,6 +16,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( "grunt-env" );
     grunt.loadNpmTasks( "grunt-knex-migrate" );
     grunt.loadNpmTasks( "grunt-open" );
+    grunt.loadNpmTasks( "grunt-karma" );
 
     grunt.initConfig( {
         watch: {
@@ -105,23 +106,32 @@ module.exports = function( grunt ) {
         mochaTest: {
             test: {
                 options: { },
-                src: ["test/**/*.test.js"]
+                src: ["test/api/**/*.test.js"]
+            }
+        },
+        karma: {
+            single: {
+                configFile: "test/client/karma.conf.js",
+                singleRun: true
+            },
+            continuous: {
+                configFile: "test/client/karma.conf.js",
             }
         },
         curl: {
             coverage: {
-                dest: "test/reports/coverage.zip",
+                dest: "test/reports/api/coverage.zip",
                 src: "http://localhost:3001/coverage/download"
             }
         },
         unzip: {
             coverage: {
-                dest: "test/reports/",
-                src: "test/reports/coverage.zip"
+                dest: "test/reports/api/",
+                src: "test/reports/api/coverage.zip"
             }
         },
         clean: {
-            coverageZip: ["test/reports/coverage.zip"],
+            coverageZip: ["test/reports/api/coverage.zip"],
             doc: ["doc/**/*"]
         },
         jsdoc: {
@@ -129,6 +139,7 @@ module.exports = function( grunt ) {
                 src: ["app.js",
                       "app/**/*.js",
                       "test/**/*.js",
+					  "!app/public/bower_components/**/*",
                       "README.md"],
                 options: {
                     destination: "doc"
@@ -137,14 +148,18 @@ module.exports = function( grunt ) {
         },
         open: {
             coverage: {
-                path: "test/reports/lcov-report/index.html"
+                path: "test/reports/api/lcov-report/index.html"
             }
         }
     } );
 
     //simple alias
-    grunt.registerTask( "lint", "jshint" );
-    grunt.registerTask( "doc", "jsdoc" );
+    grunt.registerTask( "lint",
+						"Lint every project-owned JS-file",
+						"jshint" );
+    grunt.registerTask( "doc",
+						"Generate project documentation in doc/",
+						"jsdoc" );
 
     var envs = ["development", "test", "production"];
     var knexCommands = ["latest", "rollback", "currentVersion"];
@@ -153,13 +168,16 @@ module.exports = function( grunt ) {
     knexCommands.forEach( function(cmd) {
         envs.forEach( function(env) {
             grunt.registerTask( "migrate:" + env + ":" + cmd,
+								"Run the " + cmd + " command in " + env + 
+								" environment.",
                                 [ "env:" + env, "knexmigrate:" + cmd ] );
         } );
     } );
 
     //register make migration task (this one doesn't need an environment)
     grunt.registerTask( "migrate:make",
-                        "Create migration",
+                        "Create migration (usage: grunt " + 
+						"migrate:make:<migration_name>",
                         function( name ) {
         if( !name ) {
             throw new Error( "No migration name given! Specify like this: " + 
@@ -174,14 +192,32 @@ module.exports = function( grunt ) {
     grunt.registerTask( "server", ["lint", "express:development", "watch"] );
 
     //start the server in test setup and then run the tests
-    grunt.registerTask( "test", ["express:test", "mochaTest"] );
+    grunt.registerTask( "test:api", 
+						"Run the API tests", 
+						["express:test", "mochaTest"] );
 
-    grunt.registerTask( "test:coverage", ["env:coverage",
-                                          "express:test",
-                                          "mochaTest",
-                                          "curl:coverage",
-                                          "unzip:coverage",
-                                          "clean:coverageZip",
-                                          "open:coverage"] );
+    grunt.registerTask( "test:api:coverage",
+						"Run the API tests and output coverage information",
+						["env:coverage",
+						  "express:test",
+						  "mochaTest",
+						  "curl:coverage",
+						  "unzip:coverage",
+						  "clean:coverageZip",
+						  "open:coverage"] );
 
+    grunt.registerTask( "test:client", "test:client:single" );
+
+    grunt.registerTask( "test:client:single",
+						"Run the client tests once",
+						"karma:single" );
+
+    grunt.registerTask( "test:client:continuous",
+						"Run the client tests continuously",
+						"karma:continuous" );
+
+    grunt.registerTask( "test",
+                        "Run all tests",
+                        ["test:client:single", "test:api"] );
+    
 };
