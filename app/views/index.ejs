@@ -70,6 +70,12 @@
             src="public/directives/<%= ngDirective %>"></script>
     <% } ); %>
 
+    <!-- angular filters -->
+    <% ngFilters.forEach( function( ngFilter ) { %>
+        <script
+            type="text/javascript"
+            src="public/filters/<%= ngFilters %>"></script>
+    <% } ); %>
 
 </head>
 <body ng-app="bedman">
