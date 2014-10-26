@@ -4,6 +4,8 @@ module.exports.withModels = function( models ) {
 
     var Customer = models.Customer;
     var Bill = models.Bill;
+    var Reservation = models.Reservation;
+
     return {
         customers: {
             john: new Customer( {
@@ -31,6 +33,20 @@ module.exports.withModels = function( models ) {
                 billId: "r2",
                 date: "1988-10-04",
                 price: 11.11
+            } )
+        },
+        reservations: {
+            a: new Reservation( {
+                customer: "0",
+                room: "HS 14",
+                discount: 0,
+                roomCost: 45
+            } ),
+            b: new Reservation( {
+                customer: "john",
+                room: "366",
+                discount: 33,
+                roomCost: 49.90
             } )
         }
     };
