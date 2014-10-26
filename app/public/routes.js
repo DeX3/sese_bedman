@@ -13,6 +13,14 @@ app.config( ["$routeProvider", function( $routeProvider) {
             templateUrl: "public/views/customers/edit.html",
             controller: "CustomerEditCtrl"
         } ).
+        when( "/reservations", {
+            templateUrl: "public/views/reservations/index.html",
+            controller: "reservationListCtrl"
+        } ).
+        when( "/reservations/:id", {
+            templateUrl: "public/views/customers/edit.html",
+            controller: "CustomerEditCtrl"
+        } ).
         otherwise( {
             redirectTo: "/customers"
         } );

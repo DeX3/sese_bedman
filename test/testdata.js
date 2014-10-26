@@ -3,6 +3,7 @@
 module.exports.withModels = function( models ) {
 
     var Customer = models.Customer;
+   // var Reservation = models.Reservation;
 
     return {
         customers: {
@@ -20,7 +21,21 @@ module.exports.withModels = function( models ) {
                 phone: "987654321",
                 email: "jane.doe@example.com"
             } )
-        }
+        }/*
+        reservations: {
+            a: new Reservation( {
+                customers: ["0", "1"] ,
+                room: "22",
+                discount: "0",
+                roomCost: "45"
+            } ),
+            b: new Reservation( {
+                customers: ["0", "1"] ,
+                room: "366",
+                discount: "0.33",
+                roomCost: "49.90"
+            } )
+        }*/
     };
 
 };

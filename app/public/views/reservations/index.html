@@ -1,0 +1,19 @@
+<h1>Reservation list</h1>
+
+<li ng-show="reservations.length" ng-repeat="reservation in reservations">
+    <ul>
+        <a href="#/reservations/{{reservation.id}}">
+            {{reservation.firstName}} {{reservation.lastName}}
+        </a>
+    </ul>
+</li>
+
+<p ng-hide="reservations.length">
+    No reservations available!
+</p>
+
+<a href="#/reservations/create">Create a new reservation</a>
+
+<pre class="debug">
+    {{ reservations | json }}
+</pre>
