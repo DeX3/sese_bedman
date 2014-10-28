@@ -3,7 +3,7 @@
 <li ng-show="reservations.length" ng-repeat="reservation in reservations">
     <ul>
         <a href="#/reservations/{{reservation.id}}">
-            {{reservation.firstName}} {{reservation.lastName}}
+            {{reservation.customer}} {{reservation.room}}
         </a>
     </ul>
 </li>

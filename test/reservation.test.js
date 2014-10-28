@@ -73,17 +73,17 @@ describe( "Reservation API", function() {
         } );
     }
     
-    testPresence( "reservations" );
+    testPresence( "customer" );
     testPresence( "room" );
-    testPresence( "discount" );
+    //testPresence( "discount" );
     testPresence( "roomCost" );
 
     it( "should perform validations on updates as well", function( done ) {
         
-        testData.a.save().then( function( savedJohn ) {
+        testData.reservations.a.save().then( function( savedJohn ) {
             
-            var c = testData.a.clone().attributes;
-            c.discount = "2";
+            var c = testData.reservations.a.clone().attributes;
+            c.discount = "-1";
 
             request( testsetup.appUrl )
                 .put( "/api/reservations/" + savedJohn.id )

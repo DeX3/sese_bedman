@@ -2,10 +2,10 @@
 var Checkit = require( "checkit" );
 
 var validator = new Checkit( {
-    customers: ["required", "array"] ,
-    room: "required",
-    discount: "between:0:1",
-    roomCost: ["required", "numeric"]
+    customer:   "required",
+    room:       "required",
+    discount:   ["greaterThanEqualTo:0", "lessThanEqualTo:100"],
+    roomCost:   "required"
 } );
 
 module.exports = function( app ) {

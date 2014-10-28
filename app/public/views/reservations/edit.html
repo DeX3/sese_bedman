@@ -3,75 +3,39 @@
 <form ng-submit="save()" class="reservation-form">
     <div class="form-group">
         <div class="form-inline">
-            <label for="firstName">Name:</label></br>
+            <label for="customer">CustomerIDs:</label></br>
             <input type="text"
-                   name="firstName"
-                   ng-model="reservation.firstName"
-                   placeholder="First name"
+                   name="customer"
+                   ng-model="reservation.customer"
+                   placeholder="CustomerID"
                    class="form-control"
                    required
                    autofocus></input>
-            <input type="text"
-                   name="lastName"
-                   ng-model="reservation.lastName"
-                   placeholder="Last name"
-                   required
-                   class="form-control"></input>
         </div>
     </div>
     <div class="clearfix"></div>
     <div>
-        <label for="company">Company:</label>
+        <label for="room">Room:</label>
         <input type="text"
-               name="company"
-               ng-model="reservation.company"
-               placeholder="Company"
+               name="room"
+               ng-model="reservation.room"
+               placeholder="Room"
                required
                class="form-control"></input>
     </div>
     <div class="form-group">
-        <label for="notes">Notes:</label>
-        <textarea name="notes"
-                  ng-model="reservation.notes"
-                  placeholder="Notes"
-                  ng-null-if-blank
-                  class="form-control"></textarea>
-    </div>
-    <div class="form-group">
         <label for="discount">Discount:</label>
         <input type="number"
-               name="lastName"
+               name="discount"
                ng-model="reservation.discount"
                placeholder="0"
                class="form-control"></input>
     </div>
     <div class="form-group">
-        <label for="phone">Phone:</label>
-        <input type="text"
-               name="phone"
-               ng-model="reservation.phone"
-               class="form-control"></input>
-    </div>
-    <div class="form-group">
-        <label for="fax">Fax:</label>
-        <input type="text"
-               name="fax"
-               ng-model="reservation.fax"
-               class="form-control"></input>
-    </div>
-    <div class="form-group">
-        <label for="email">e-Mail:</label>
-        <input type="email"
-               name="email"
-               ng-model="reservation.email"
-               required
-               class="form-control"></input>
-    </div>
-    <div class="form-group">
-        <label for="web">Web address:</label>
-        <input type="url"
-               name="web"
-               ng-model="reservation.web"
+        <label for="roomCost">RoomCost:</label>
+        <input type="number"
+               name="roomCost"
+               ng-model="reservation.roomCost"
                class="form-control"></input>
     </div>
     <input type="submit" class="btn btn-primary"></input>
