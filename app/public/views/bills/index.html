@@ -1,0 +1,19 @@
+<h1>Bills list</h1>
+
+<li ng-show="bills.length" ng-repeat="bill in bills">
+    <ul>
+        <a href="#/bills/{{bill.id}}">
+            {{bill.billId}} {{bill.date}}
+        </a>
+    </ul>
+</li>
+
+<p ng-hide="bills.length">
+    No bills available!
+</p>
+
+<a href="#/bills/create">Create a new bill</a>
+
+<pre class="debug">
+    {{ bills | json }}
+</pre>
