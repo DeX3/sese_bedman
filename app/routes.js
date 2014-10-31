@@ -29,6 +29,7 @@ module.exports.setup = function( app ) {
     };
     
     crud( "customers", controllers.CustomerController );
+    crud( "bills", controllers.BillController );
 
     app.use( "/api", router );
 };

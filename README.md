@@ -201,7 +201,7 @@ Migrations
 Your models will rely on a database. To keep your database schema easily
 updatable, knex migrations are used.
 
-Migrations are placed in `app/migrations` and run via `grunt:migrate:<command>`.
+Migrations are placed in `app/migrations` and run via `grunt migrate:<command>`.
 There is no knexfile for these migrations as described in the knex migrations
 docs, instead the gruntfile will compute the necessary configuration for each
 command (as it differs for each environment).

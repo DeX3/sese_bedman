@@ -3,7 +3,7 @@
 module.exports.withModels = function( models ) {
 
     var Customer = models.Customer;
-
+    var Bill = models.Bill;
     return {
         customers: {
             john: new Customer( {
@@ -20,7 +20,19 @@ module.exports.withModels = function( models ) {
                 phone: "987654321",
                 email: "jane.doe@example.com"
             } )
-        }
+        },
+	bills:{
+	    r1: new Bill({
+	        billId: "r1",
+		date:"1988-10-04T23:00:00.000Z",
+		price: 12.12
+	    }),
+	    r2: new Bill({
+	        billId: "r2",
+		date: "1988-10-04T23:00:00.000Z",
+		price: 11.11
+	    })
+	}
     };
 
 };
