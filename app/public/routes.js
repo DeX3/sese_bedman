@@ -13,7 +13,7 @@ app.config( ["$routeProvider", function( $routeProvider) {
             templateUrl: "public/views/customers/edit.html",
             controller: "CustomerEditCtrl"
         } ).
-	when( "/bills", {
+        when( "/bills", {
             templateUrl: "public/views/bills/index.html",
             controller: "BillsListCtrl"
         } ).

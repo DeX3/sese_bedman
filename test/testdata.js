@@ -21,18 +21,18 @@ module.exports.withModels = function( models ) {
                 email: "jane.doe@example.com"
             } )
         },
-	bills:{
-	    r1: new Bill({
-	        billId: "r1",
-		date:"1988-10-04T23:00:00.000Z",
-		price: 12.12
-	    }),
-	    r2: new Bill({
-	        billId: "r2",
-		date: "1988-10-04T23:00:00.000Z",
-		price: 11.11
-	    })
-	}
+        bills:{
+            r1: new Bill( {
+                billId: "r1",
+                date:"1988-10-04T23:00:00.000Z",
+                price: 12.12
+            } ),
+            r2: new Bill( {
+                billId: "r2",
+                date: "1988-10-04T23:00:00.000Z",
+                price: 11.11
+            } )
+        }
     };
 
 };
