@@ -1,0 +1,48 @@
+<h1>Edit reservation</h1>
+
+<form ng-submit="save()" class="reservation-form">
+    <div class="form-group">
+        <div class="form-inline">
+            <label for="customer">CustomerIDs:</label></br>
+            <input type="text"
+                   name="customer"
+                   ng-model="reservation.customer"
+                   placeholder="CustomerID"
+                   class="form-control"
+                   required
+                   autofocus></input>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div>
+        <label for="room">Room:</label>
+        <input type="text"
+               name="room"
+               ng-model="reservation.room"
+               placeholder="Room"
+               required
+               class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label for="discount">Discount:</label>
+        <input type="number"
+               name="discount"
+               ng-model="reservation.discount"
+               placeholder="0"
+               class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label for="roomCost">RoomCost:</label>
+        <input type="number"
+               name="roomCost"
+               ng-model="reservation.roomCost"
+               class="form-control"></input>
+    </div>
+    <input type="submit" class="btn btn-primary"></input>
+
+</form>
+
+<pre class="debug">
+{{reservation | json}}
+</pre>
+
