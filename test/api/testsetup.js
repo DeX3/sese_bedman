@@ -4,7 +4,7 @@ process.env.NODE_ENV = "test";
 var config = require( "config" );
 var knex = require( "knex" )( config.get("db") ); 
 var bookshelf = require( "bookshelf" )( knex );
-var models = require( "../app/models/models" );
+var models = require( "../../app/models/models" );
 
 var testdata = require( "./testdata" );
 
