@@ -1,4 +1,5 @@
 angular.module( "bedman", [
     "ngRoute",
-    "ngResource"
+    "ngResource",
+    "angucomplete-alt"
 ] );

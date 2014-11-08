@@ -2,11 +2,8 @@
 
 process.env.NODE_ENV = "test";
 var config = require( "config" );
-var knex = require( "knex" )( config.get("db") ); 
-var bookshelf = require( "bookshelf" )( knex );
+var bookshelf = require( "../../app/models/base" );
 var models = require( "../../app/models/models" );
-
-var testdata = require( "./testdata" );
 
 var mockApp = {
     get: function(name) {
@@ -18,11 +15,9 @@ var mockApp = {
     }
 };
 
-models.setup( mockApp );
-
 module.exports = {
     app: mockApp,
     models: models,
     appUrl: "http://localhost:" + (config.get("port") || 3000),
-    testData: testdata.withModels( models )
+    testData: require( "./testdata" )
 };

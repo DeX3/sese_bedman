@@ -11,7 +11,8 @@ app.controller( "ReservationListCtrl",
 app.controller( "ReservationEditCtrl",
                 function( $scope,
                           $routeParams,
-                          Reservation ) {
+                          Reservation,
+                          Customer ) {
 
     if( $routeParams.id === "create" ) {
         $scope.reservation = new Reservation();
@@ -19,6 +20,17 @@ app.controller( "ReservationEditCtrl",
     } else {
         $scope.reservation = Reservation.get( { id: $routeParams.id } );
     }
+
+    $scope.availableCustomers = Customer.query();
+    $scope.addCustomer = function() {
+        if( $scope.selectedCustomer ) {
+            var customer = $scope.selectedCustomer.originalObject;
+            $scope.selectedCustomers.push( customer );
+        }
+    };
+    Customer.prototype.displayName = function() {
+        return this.firstName + " " + this.lastName;
+    };
 
     $scope.save = function() {
         if( $scope.reservation.newObject ) {

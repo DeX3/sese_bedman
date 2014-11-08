@@ -12,8 +12,6 @@ var Reservation = testsetup.models.Reservation;
 
 var testData = testsetup.testData;
 
-//var testData = require("./testdata_Reservation"); 
-
 describe( "Reservation API", function() {
 
     before( function( done ) {
@@ -27,11 +25,11 @@ describe( "Reservation API", function() {
 
     it( "should save a valid reservation", function( done ) {
         
-        var c = testData.reservations.a.clone().attributes;
+        var r = testData.reservations.a;
 
         request( testsetup.appUrl )
             .post( "/api/reservations" )
-            .send( c )
+            .send( r )
             .expect( 201 )
             .end( function( err, res ) {
 
@@ -45,7 +43,7 @@ describe( "Reservation API", function() {
             delete res.body.created_at;
             delete res.body.updated_at;
 
-            res.body.should.eql( c );
+            res.body.should.eql( r );
 
             done();
         } );
@@ -55,7 +53,7 @@ describe( "Reservation API", function() {
     function testPresence( fieldName ) {
         it( "should require " + fieldName + " to be present", function( done ) {
 
-            var c = testData.reservations.a.clone().attributes;
+            var c = Object.clone( testData.reservations.a, true );
             delete c[fieldName];
 
             request( testsetup.appUrl )
@@ -73,17 +71,17 @@ describe( "Reservation API", function() {
         } );
     }
     
-    testPresence( "customer" );
     testPresence( "room" );
     //testPresence( "discount" );
     testPresence( "roomCost" );
 
     it( "should perform validations on updates as well", function( done ) {
         
-        testData.reservations.a.save().then( function( savedJohn ) {
+        var a = new Reservation( testData.reservations.a );
+        a.save().then( function( savedJohn ) {
             
-            var c = testData.reservations.a.clone().attributes;
-            c.discount = "-1";
+            var c = Object.clone( testData.reservations.a, true );
+            c.discount = -1;
 
             request( testsetup.appUrl )
                 .put( "/api/reservations/" + savedJohn.id )
@@ -130,11 +128,11 @@ describe( "Reservation API", function() {
 
     it( "should successfully delete existing reservations", function( done ) {
         
-        testData.reservations.a.save( {}, {method: "insert"})
-                               .then( function( savedJohn ) {
+        var a = new Reservation( testData.reservations.a );
+        a.save( {}, {method: "insert"} ).then( function( savedReservation ) {
             
             request( testsetup.appUrl )
-                .delete( "/api/reservations/" + savedJohn.id )
+                .delete( "/api/reservations/" + savedReservation.id )
                 .expect( 200 )
                 .end( function( err, res ) {
 

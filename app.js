@@ -23,23 +23,19 @@ if( ["development",
 var express = require( "express" );
 var bodyParser = require( "body-parser" );
 var config = require( "config" );
-var knex = require( "knex" )( config.get( "db" ) );
 var fs = require( "fs" );
 
 var routes = require( "./app/routes" );
 var models = require( "./app/models/models" );
 var controllers = require( "./app/controllers/controllers" );
 
-var bookshelf = require( "bookshelf" )( knex );
-
 var app = express();
-app.set( "bookshelf", bookshelf );
 
 app.use( config.get("logger") );
 
 app.use( bodyParser.json() );
 
-models.setup( app );
+app.set( "bookshelf", require("./app/models/base") );
 app.set( "models", models );
 
 controllers.setup( app );
