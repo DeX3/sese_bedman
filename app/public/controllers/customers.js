@@ -16,11 +16,17 @@ app.controller( "CustomerEditCtrl",
 
     if( $routeParams.id === "create" ) {
         $scope.customer = new Customer();
+        $scope.customer.newObject = true;
     } else {
         $scope.customer = Customer.get( { id: $routeParams.id } );
     }
 
     $scope.save = function() {
-        $scope.customer.$save();
+        if( $scope.customer.newObject ) {
+            delete $scope.customer.newObject;
+            $scope.customer.$save();
+        } else {
+            $scope.customer.$update();
+        }
     };
 } );
