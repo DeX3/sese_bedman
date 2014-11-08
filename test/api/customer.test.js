@@ -6,6 +6,7 @@ require( "should" );
 require( "assert" );
 require( "expect.js" );
 require( "sugar" );
+var BPromise = require( "bluebird" );
 
 var request = require( "supertest" );
 
@@ -184,7 +185,7 @@ describe( "Customer API", function() {
         var reservation = new Reservation( testData.reservations.a );
         var john = new Customer( testData.customers.john );
 
-        Promise.all( [
+        BPromise.all( [
             reservation.save( {}, {method:"insert"} ),
             john.save( {}, {method:"insert"} )
         ] ).then( function( results ) {

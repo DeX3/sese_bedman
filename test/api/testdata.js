@@ -20,20 +20,20 @@ module.exports = {
     bills: {
         r1: {
             billId: "r1",
-            date:"1988-10-04",
+            date: "1988-10-04T23:00:00.000Z",
             price: 12.12
         },
+    },
  	rooms: {
-            a: {
-                name: "A",
-                maxCap: 1,
-				priceSingle : 30
-            },
-            b: {
-                name: "B",
-                maxCap: 2,
-				priceSingle : 15
-            }
+        a: {
+            name: "A",
+            maxCap: 1,
+            priceSingle : 30
+        },
+        b: {
+            name: "B",
+            maxCap: 2,
+            priceSingle : 15
         }
     },
     reservations: {

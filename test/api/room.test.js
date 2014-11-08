@@ -103,8 +103,8 @@ describe( "Room API", function() {
 
     it( "should successfully delete existing room", function( done ) {
         
-        testData.rooms.a.save( {}, {method: "insert"})
-                               .then( function( a ) {
+        var a = new Room( testData.rooms.a );
+        a.save( {}, {method: "insert"} ).then( function( a ) {
             
             request( testsetup.appUrl )
                 .delete( "/api/rooms/" + a.id )

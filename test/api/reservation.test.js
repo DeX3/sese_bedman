@@ -9,6 +9,8 @@ var request = require( "supertest" );
 
 var testsetup = require( "./testsetup" );
 var Reservation = testsetup.models.Reservation;
+var Customer = testsetup.models.Customer;
+var bookshelf = testsetup.app.get( "bookshelf" );
 
 var testData = testsetup.testData;
 
@@ -20,7 +22,13 @@ describe( "Reservation API", function() {
 
     beforeEach( function( done ) {
         //delete all Reservations in the database
-        Reservation.query().del().then( done.bind( null, null ) );
+        
+        // first, delete all customer <-> reservation relations
+        bookshelf.knex( "customers_reservation" ).del().then( [
+            // now all customers and reservations can then be deleted
+            Customer.query().del(),
+            Reservation.query().del()
+        ] ).then( done.bind(null, null) );
     } );
 
     it( "should save a valid reservation", function( done ) {

@@ -25,7 +25,7 @@ describe( "Bills API", function() {
 
     it( "should save a valid Bill", function( done ) {
         
-        var r1 = testData.bills.r1;
+        var r1 = Object.clone( testData.bills.r1, true );
 
         request( testsetup.appUrl )
             .post( "/api/bills" )
@@ -57,7 +57,6 @@ describe( "Bills API", function() {
 
     function testPresence( fieldName ) {
         it( "should require " + fieldName + " to be present", function( done ) {
-
 
             var r1 = Object.clone( testData.bills.r1, true );
             delete r1[fieldName];

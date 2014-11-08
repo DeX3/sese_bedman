@@ -14,9 +14,6 @@ bookshelf.Model = bookshelf.Model.extend( {
         this.on( "updating", this.skipTimestamps );
         this.on( "saving", this.validate );
     },
-
-    validate: function() {},
-
     skipTimestamps: function( model, attrs ) {
         delete attrs.created_at;
         delete attrs.updated_at;
