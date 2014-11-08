@@ -5,6 +5,7 @@ var validator = new Checkit( {
     firstName: "required",
     lastName: "required",
     company: "required",
+    phone: "required",
     email: ["required", "email"]
 } );
 
