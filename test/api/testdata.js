@@ -5,6 +5,7 @@ module.exports.withModels = function( models ) {
     var Customer = models.Customer;
     var Bill = models.Bill;
     var Reservation = models.Reservation;
+	var Room = models.Room;
 
     return {
         customers: {
@@ -47,6 +48,18 @@ module.exports.withModels = function( models ) {
                 room: "366",
                 discount: 33,
                 roomCost: 49.90
+            } )
+        },
+ 	rooms: {
+            a: new Room( {
+                name: "A",
+                maxCap: 1,
+				priceSingle : 30
+            } ),
+            b: new Room( {
+                name: "B",
+                maxCap: 2,
+				priceSingle : 15
             } )
         }
     };

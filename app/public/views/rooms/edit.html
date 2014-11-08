@@ -1,0 +1,36 @@
+<h1>Edit room</h1>
+
+<form ng-submit="save()" class="room-form">
+
+    <div>
+        <label for="name">Roomname:</label>
+        <input type="text"
+               name="name"
+               ng-model="room.name"
+               placeholder="Name"
+               required
+               class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label for="maxCap">Maximum Capacity:</label>
+        <input type="number"
+               name="maxCap"
+               ng-model="room.maxCap"
+               placeholder="0"
+               class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label for="priceSingle">Price (Single):</label>
+        <input type="number"
+               name="priceSingle"
+               ng-model="room.priceSingle"
+               class="form-control"></input>
+    </div>
+    <input type="submit" class="btn btn-primary"></input>
+
+</form>
+
+<pre class="debug">
+{{room | json}}
+</pre>
+
