@@ -43,6 +43,11 @@ describe( "Bills API", function() {
             delete res.body.created_at;
             delete res.body.updated_at;
 
+            //compare the dates via date, not via strings
+            new Date( res.body.date ).should.eql( new Date( r1.date ) );
+            delete res.body.date;
+            delete r1.date;
+
             res.body.should.eql( r1 );
 
             done();

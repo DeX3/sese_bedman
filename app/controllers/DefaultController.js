@@ -45,7 +45,7 @@ module.exports.update = function( Model, req, res ) {
     
     var id = req.params.id;
     var data = Object.merge( req.body, req.query );
-    
+
     Model.where( { id: id } ).fetch().then( function( result ) {
         if( !result ) {
             res.status( 404 ).send();

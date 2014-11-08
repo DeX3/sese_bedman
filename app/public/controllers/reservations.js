@@ -15,11 +15,19 @@ app.controller( "ReservationEditCtrl",
 
     if( $routeParams.id === "create" ) {
         $scope.reservation = new Reservation();
+        $scope.reservation.newObject = true;
     } else {
         $scope.reservation = Reservation.get( { id: $routeParams.id } );
     }
 
     $scope.save = function() {
-        $scope.reservation.$save();
+        if( $scope.reservation.newObject ) {
+            delete $scope.reservation.newObject;
+            $scope.reservation.$save().catch( function() {
+                $scope.reservation.newObject = true;
+            } );
+        } else {
+            $scope.reservation.$update();
+        }
     };
 } );

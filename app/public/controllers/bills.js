@@ -15,11 +15,19 @@ app.controller( "BillsEditCtrl",
 
     if( $routeParams.id === "create" ) {
         $scope.bill = new Bill();
+        $scope.bill.newObject = true;
     } else {
         $scope.bill = Bill.get( { id: $routeParams.id } );
     }
 
     $scope.save = function() {
-        $scope.bill.$save();
+        if( $scope.bill.newObject ) {
+            delete $scope.bill.newObject;
+            $scope.bill.$save().catch( function() {
+                $scope.bill.newObject = true;
+            } );
+        } else {
+            $scope.bill.$update();
+        }
     };
 } );

@@ -17,7 +17,12 @@ module.exports = function( app ) {
         tableName: "customers",
         hasTimestamps: true,
         initialize: function() {
+            this.on( "updating", this.skipTimestamps );
             this.on( "saving", this.validate );
+        },
+        skipTimestamps: function( model, attrs ) {
+            delete attrs.created_at;
+            delete attrs.updated_at;
         },
         validate: function() {
             return validator.run( this.attributes );
