@@ -29,6 +29,14 @@ app.config( ["$routeProvider", function( $routeProvider) {
             templateUrl: "public/views/reservations/edit.html",
             controller: "ReservationEditCtrl"
         } ).
+		when( "/rooms", {
+            templateUrl: "public/views/rooms/index.html",
+            controller: "RoomListCtrl"
+        } ).
+        when( "/rooms/:id", {
+            templateUrl: "public/views/rooms/edit.html",
+            controller: "RoomEditCtrl"
+        } ).
         otherwise( {
             redirectTo: "/customers"
         } );

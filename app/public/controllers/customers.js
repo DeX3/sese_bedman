@@ -8,7 +8,6 @@ app.controller( "CustomerListCtrl",
 
     $scope.customers = Customer.query();
 } );
-
 app.controller( "CustomerEditCtrl",
                 function( $scope,
                           $routeParams,
