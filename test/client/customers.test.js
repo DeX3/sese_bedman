@@ -90,7 +90,7 @@ describe( "Customer controllers", function() {
 		
 		var ret = {
 			$scope: rootScope.$new(),
-			Customer: chai.spy( function() {} )
+			Customer: chai.spy()
 		};
 		
 		ret.Customer.query = chai.spy( function() {
@@ -107,7 +107,7 @@ describe( "Customer controllers", function() {
 		ret.Customer.get = chai.spy( function( criteria ) {
 			return criteria;
 		} );
-		ret.Customer.prototype.$save = chai.spy( function() {} );
+		ret.Customer.prototype.$save = chai.spy();
 
 		return ret;
 	}

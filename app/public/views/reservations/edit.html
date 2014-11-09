@@ -13,6 +13,7 @@
                 search-fields="firstName,lastName"
                 title-field="firstName,lastName"
                 class="pull-left"
+                ng-keypress="onSearchKeyPress($event)"
             ></angucomplete-alt>
             <button type="button"
                     ng-click="addCustomer()"
@@ -22,8 +23,8 @@
             </button>
             <div class="clearfix"></div>
             <select name="customers"
-                   ng-model="selectedCustomers"
-                   ng-options="customer.id as customer.displayName() for customer in reservation.customers"
+                   ng-model="currentCustomer"
+                   ng-options="customer as customer.displayName() for customer in selectedCustomers"
                    size="6"
                    class="form-control customers"
                    required
@@ -60,6 +61,6 @@
 </form>
 
 <pre class="debug">
-{{reservation | json}}
+    {{selectedCustomers | json}}
 </pre>
 

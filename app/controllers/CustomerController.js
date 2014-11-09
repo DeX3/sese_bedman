@@ -24,7 +24,8 @@ module.exports.setup = function( app ) {
             if( !result ) {
                 res.status( 404 ).send();
             } else {
-                return result.save( data, { patch: true } ).then( function(savedModel) {
+                return result.save( data, { patch: true } ).then(
+                    function(savedModel) {
                     res.status( 200 ).json( savedModel );
                 } );
             }
