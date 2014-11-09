@@ -60,6 +60,7 @@ module.exports.setup = function( app ) {
         ).then( function( reservation ) {
             res.status( 201 ).json( reservation );
         } ).catch( function(error) {
+            console.dir( error );
             res.status( 500 ).json( error );
         } );
     };
