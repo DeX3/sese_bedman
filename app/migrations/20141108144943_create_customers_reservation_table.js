@@ -8,9 +8,11 @@ exports.up = function(knex, Promise) {
         table.increments();
         table.timestamps();
         table.integer( "customer_id" ).unsigned()
-                                      .references( "customers.id" );
+                                      .references( "customers.id" )
+                                      .onDelete( "CASCADE" );
         table.integer( "reservation_id" ).unsigned()
-                                         .references( "reservation.id" );
+                                         .references( "reservation.id" )
+                                         .onDelete( "CASCADE" );
     } );
 };
 

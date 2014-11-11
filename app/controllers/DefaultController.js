@@ -67,7 +67,7 @@ module.exports.destroy = function( Model, req, res ) {
         if( !result ) {
             res.status( 404 ).send();
         } else {
-            result.destroy().then( function() {
+            return result.destroy().then( function() {
                 res.status( 200 ).send();
             } );
         }

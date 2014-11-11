@@ -11,6 +11,7 @@ app.controller( "ReservationListCtrl",
 app.controller( "ReservationEditCtrl",
                 function( $scope,
                           $routeParams,
+                          $location,
                           Reservation,
                           Customer ) {
 
@@ -72,11 +73,21 @@ app.controller( "ReservationEditCtrl",
 
         if( $scope.reservation.newObject ) {
             delete $scope.reservation.newObject;
-            $scope.reservation.$save().catch( function() {
+            $scope.reservation.$save().then( function( reservation ) {
+                $location.path( "/reservations/" + reservation.id );
+            } ).catch( function() {
                 $scope.reservation.newObject = true;
             } );
         } else {
-            $scope.reservation.$update();
+            $scope.reservation.$update().then( function( reservation ) {
+                $location.path( "/reservations/" + reservation.id );
+            } );
         }
+    };
+
+    $scope.destroy = function() {
+        $scope.reservation.$delete().then( function() {
+            $location.path( "/reservations" );
+        } );
     };
 } );

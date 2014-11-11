@@ -11,6 +11,19 @@ module.exports.setup = function( app ) {
     ctrl.index = DefaultController.index.bind( null, Reservation );
     ctrl.destroy = DefaultController.destroy.bind( null, Reservation );
 
+    var updateCustomers = function( customers, reservation ) {
+
+        reservation.customers().forEach( function( customer ) {
+            reservation.customers().detach( customer );
+        } );
+
+        customers.forEach( function( customer ) {
+            reservation.customers().attach( customer );
+        } );
+
+        return reservation;
+    };
+
     ctrl.update = function( req, res ) {
 
         var id = req.params.id;
@@ -27,21 +40,10 @@ module.exports.setup = function( app ) {
                 delete data.customers;
                 //TODO transaction?
                 return reservation.save( data, { patch: true } ).then(
-                    function(savedReservation) {
-                    
-                    for( var i=0 ; i < reservation.customers.length ; i++ ) {
-                        reservation.customers().detach( reservation.customers[i] );
-                    }
-
-                    for( i=0 ; i < customers.length ; i++ ) {
-                        reservation.customers().attach( customers[i] );
-                    }
-
-                    res.status( 200 ).json( reservation );
-                } );
+                    updateCustomers.bind( null, customers )
+                );
             }
         } ).catch( function( error ) {
-            console.dir( error );
             res.status( 500 ).json( error );
         } );
     };
@@ -49,10 +51,13 @@ module.exports.setup = function( app ) {
     ctrl.create = function( req, res ) {
         
         var data = Object.merge( req.body, req.query );
+        var customers = data.customers;
+        delete data.customers;
 
-        console.dir( data );
-
-        Reservation.forge( data ).save().then( function( reservation ) {
+        //TODO transaction?
+        Reservation.forge( data ).save().then( 
+            updateCustomers.bind( null, customers )
+        ).then( function( reservation ) {
             res.status( 201 ).json( reservation );
         } ).catch( function(error) {
             res.status( 500 ).json( error );

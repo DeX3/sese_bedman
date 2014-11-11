@@ -63,9 +63,7 @@ describe( "Reservation controllers", function() {
 
 			chai.expect( mockedParams.$scope.reservation ).to.exist;
 			chai.expect( mockedParams.Reservation ).to.not.have.been.called();
-			chai.expect( mockedParams.Reservation.get ).to.have.been.called.with(
-				{ id: 4711 }
-			);
+			chai.expect( mockedParams.Reservation.get ).to.have.been.called();
 
 			chai.expect( mockedParams.$scope.reservation.id ).to.equal( 4711 );
 
@@ -128,6 +126,12 @@ describe( "Reservation controllers", function() {
 
 		ret.$routeParams = routeParams;
 		ret.Reservation.get = chai.spy( function( criteria ) {
+            criteria.$promise = {
+                then: chai.spy( function(fn) {
+                    criteria.customers = [];
+                    fn( criteria );
+                } )
+            };
 			return criteria;
 		} );
 		ret.Reservation.prototype.$save = chai.spy( function(){
