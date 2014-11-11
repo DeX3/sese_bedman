@@ -87,10 +87,11 @@ describe( "Reservation controllers", function() {
 		} ) );
 
         it( "should provide a list of customers to add to the reservation",
-            inject( function( $controller, $rootScope ) {
+            inject( function( $controller, $rootScope, $location ) {
 
 			var mockedParams = mockParamsEdit( $controller,
 											   $rootScope,
+                                               $location,
 											   { id: "create" } );
 			$controller( "ReservationEditCtrl", mockedParams );
 
@@ -132,10 +133,16 @@ describe( "Reservation controllers", function() {
                     fn( criteria );
                 } )
             };
+            
 			return criteria;
 		} );
 		ret.Reservation.prototype.$save = chai.spy( function(){
-            return { catch: chai.spy() };
+            return { 
+                then: chai.spy( function(fn) {
+                    fn( { id: "4712" } );
+                } ),
+                catch: chai.spy()
+            };
         } );
 
         ret.Customer = chai.spy( function() {} );

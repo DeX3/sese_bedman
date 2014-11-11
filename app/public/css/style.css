@@ -19,3 +19,6 @@ form.reservation-form select {
     margin-top: 10px;
 }
 
+button.delete-reservation-btn {
+    margin-top: 10px;
+}
