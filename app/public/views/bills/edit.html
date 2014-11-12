@@ -23,13 +23,9 @@
         <label for="date">Date:</label>
         <input type="date"
                name="date"
-               ng-model="bill.date"
+               ng-model="billdate"
+               ng-model-options="{ timezone: 'UTC' }"
                class="form-control"></input>
     </div>
     <input type="submit" class="btn btn-primary"></input>
 </form>
-
-<pre class="debug">
-{{bill | json}}
-</pre>
-

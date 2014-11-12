@@ -13,8 +13,6 @@ module.exports = bookshelf.Model.extend( {
     hasTimestamps: true,
     initialize: function() {
         bookshelf.Model.prototype.initialize.apply( this, arguments );
-
-        this.on( "saving", this.fixDate.bind(this, "date") );
         this.on( "saving", this.validate );
     },
     validate: function() {
