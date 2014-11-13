@@ -1,13 +1,6 @@
 "use strict";
 
 var app = angular.module( "bedman" );
-
-app.controller( "ReservationListCtrl",
-                function( $scope,
-                          Reservation ) {
-
-    $scope.reservations = Reservation.query();
-} );
 app.controller( "ReservationEditCtrl",
                 function( $scope,
                           $routeParams,
@@ -78,6 +71,7 @@ app.controller( "ReservationEditCtrl",
             } ).catch( function() {
                 $scope.reservation.newObject = true;
             } );
+            
         } else {
             $scope.reservation.$update().then( function( reservation ) {
                 $location.path( "/reservations/" + reservation.id );

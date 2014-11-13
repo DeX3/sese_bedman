@@ -13,13 +13,15 @@ module.exports.setup = function( app ) {
 
     var updateCustomers = function( customers, reservation ) {
 
-        reservation.customers().forEach( function( customer ) {
-            reservation.customers().detach( customer );
-        } );
+        if( typeof customers !== "undefined" ) {
+            reservation.customers().forEach( function( customer ) {
+                reservation.customers().detach( customer );
+            } );
 
-        customers.forEach( function( customer ) {
-            reservation.customers().attach( customer );
-        } );
+            customers.forEach( function( customer ) {
+                reservation.customers().attach( customer );
+            } );
+        }
 
         return reservation;
     };
@@ -60,7 +62,6 @@ module.exports.setup = function( app ) {
         ).then( function( reservation ) {
             res.status( 201 ).json( reservation );
         } ).catch( function(error) {
-            console.dir( error );
             res.status( 500 ).json( error );
         } );
     };

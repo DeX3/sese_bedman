@@ -1,16 +1,10 @@
 "use strict";
 
 var app = angular.module( "bedman" );
-
-app.controller( "RoomListCtrl",
-                function( $scope,
-                          Room ) {
-
-    $scope.rooms = Room.query();
-} );
 app.controller( "RoomEditCtrl",
                 function( $scope,
                           $routeParams,
+                          $location,
                           Room ) {
 
     if( $routeParams.id === "create" ) {
@@ -21,5 +15,11 @@ app.controller( "RoomEditCtrl",
 
     $scope.save = function() {
         $scope.room.$save();
+    };
+
+    $scope.destroy = function() {
+        $scope.room.$delete().then( function() {
+            $location.path( "/rooms" );
+        } );
     };
 } );

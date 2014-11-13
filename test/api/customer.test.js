@@ -6,7 +6,6 @@ require( "should" );
 require( "assert" );
 require( "expect.js" );
 require( "sugar" );
-var BPromise = require( "bluebird" );
 
 var request = require( "supertest" );
 
@@ -177,24 +176,6 @@ describe( "Customer API", function() {
                 done();
             } );
 
-        } );
-    } );
-
-    it( "should understand the reservations association", function( done ) {
-
-        var reservation = new Reservation( testData.reservations.a );
-        var john = new Customer( testData.customers.john );
-
-        BPromise.all( [
-            reservation.save( {}, {method:"insert"} ),
-            john.save( {}, {method:"insert"} )
-        ] ).then( function( results ) {
-           var savedReservation = results[0];
-           var savedJohn = results[1];
-
-           savedJohn.reservations().attach( savedReservation );
-
-            done();
         } );
     } );
 

@@ -1,16 +1,10 @@
 "use strict";
 
 var app = angular.module( "bedman" );
-
-app.controller( "BillsListCtrl",
-                function( $scope,
-                          Bill ) {
-
-    $scope.bills = Bill.query();
-} );
 app.controller( "BillsEditCtrl",
                 function( $scope,
                           $routeParams,
+                          $location,
                           DateService,
                           Bill ) {
 
@@ -31,11 +25,21 @@ app.controller( "BillsEditCtrl",
         if( $scope.bill.newObject ) {
             delete $scope.bill.newObject;
 
-            $scope.bill.$save().catch( function() {
+            $scope.bill.$save().then( function(bill) {
+                $location.path( "/bills/" + bill.id );
+            } ).catch( function() {
                 $scope.bill.newObject = true;
             } );
         } else {
-            $scope.bill.$update();
+            $scope.bill.$update().then( function(bill) {
+                $location.path( "/bills/" + bill.id );
+            } );
         }
+    };
+
+    $scope.destroy = function() {
+        $scope.bill.$delete().then( function() {
+            $location.path( "/bills" );
+        } );
     };
 } );

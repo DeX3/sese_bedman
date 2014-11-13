@@ -1,0 +1,27 @@
+body{
+    padding-top: 50px;
+}
+form.customer-form {
+    width: 50%;
+}
+
+form.reservation-form {
+    
+    select.customers {
+        width: 208px;
+    }
+
+    button.add-customer-btn {
+        height: 26px;
+        line-height: 13px;
+    }
+    
+    select {
+        margin-top: 10px;
+    }
+
+}
+
+button.delete-btn {
+    margin-top: 10px;
+}

@@ -29,7 +29,7 @@ app.config( ["$routeProvider", function( $routeProvider) {
             templateUrl: "public/views/reservations/edit.html",
             controller: "ReservationEditCtrl"
         } ).
-		when( "/rooms", {
+        when( "/rooms", {
             templateUrl: "public/views/rooms/index.html",
             controller: "RoomListCtrl"
         } ).

@@ -7,15 +7,15 @@ exports.up = function(knex, Promise) {
         table.string( "name" ).notNullable();
         table.integer( "maxCap" ).notNullable();
         table.integer("priceSingle");
-		table.integer("priceDouble");
-		table.integer("priceTriple");
-		table.integer("priceSingleChild");
-		table.integer("priceSingleTwoChildren");
-		table.integer("priceDoubleChild");
+        table.integer("priceDouble");
+        table.integer("priceTriple");
+        table.integer("priceSingleChild");
+        table.integer("priceSingleTwoChildren");
+        table.integer("priceDoubleChild");
     } );
   
 };
 
 exports.down = function(knex, Promise) {
-	return knex.schema.dropTable( "rooms" );
+    return knex.schema.dropTable( "rooms" );
 };

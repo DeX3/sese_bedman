@@ -14,7 +14,7 @@ module.exports = {
     logger: expressWinston.logger( {
         transports: [
             new winston.transports.File( {
-                filename: "test/reports/tests.log",
+                filename: "test/api/reports/tests.log",
                 colorize: true
             } )
         ]

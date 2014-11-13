@@ -45,20 +45,6 @@ bookshelf.Model = bookshelf.Model.extend( {
     },
 
     fixDateIn: function( name, model, attrs ) {
-
-        if( name in this.attributes &&
-            typeof this.attributes[name] === "string" ) {
-            var match = this.attributes[name].match( /(\d+)-(\d+)-(\d+)/ );
-            var date = {
-                year: match[1],
-                month: match[2],
-                day: match[3]
-            };
-
-            this.attributes[name] = new Date( Date.UTC( date.year,
-                                                        date.month,
-                                                        date.day ) );
-        }
     },
 
     fixDateOut: function( name, model, resp, options ) {

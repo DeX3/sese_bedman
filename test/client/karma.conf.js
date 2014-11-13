@@ -21,11 +21,11 @@ module.exports = function( config ) {
             "app/public/routes.js",
             "app/public/controllers/**/*.js",
             "app/public/directives/**/*.js",
+            "test/client/testutils.js",
             "test/client/**/*.test.js"
         ],
 
         reporters: ["mocha", "coverage"],
-
         preprocessors: {
             "app/public/!(bower_components)/**/*.js": "coverage",
         },
