@@ -14,7 +14,6 @@
     "express": "4.9.5",
     "express-winston": "0.2.8",
     "glob": "^4.0.6",
-    "grunt-sass": "^0.16.1",
     "knex": "^0.7.3",
     "mysql": "^2.5.1",
     "string.prototype.endswith": "^0.2.0",

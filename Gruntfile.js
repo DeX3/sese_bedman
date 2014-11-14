@@ -17,7 +17,6 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( "grunt-knex-migrate" );
     grunt.loadNpmTasks( "grunt-open" );
     grunt.loadNpmTasks( "grunt-karma" );
-    grunt.loadNpmTasks( "grunt-sass" );
 
     grunt.initConfig( {
         watch: {
@@ -41,10 +40,6 @@ module.exports = function( grunt ) {
                         "app/public/**/*.css",
                         "app/public/**/*.js"],
                 options: { livereload: true }
-            },
-            sass: {
-                files: ["app/public/scss/**/*.scss"],
-                tasks: ["sass"]
             }
         },
         express: {
@@ -106,16 +101,6 @@ module.exports = function( grunt ) {
                           "test/reports/**/*.js"
                          ],
                 jshintrc: true
-            }
-        },
-        sass: {
-            options: {
-                sourceMap: true
-            },
-            dist: {
-                files: {
-                    "app/public/css/style.css": "app/public/scss/style.scss"
-                }
             }
         },
         mochaTest: {

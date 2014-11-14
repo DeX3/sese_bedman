@@ -1,24 +1,24 @@
-/* line 1, /media/data/documents/Privat/prog/node/bedman/app/public/scss/style.scss */
-body {
-  padding-top: 50px; }
+body{
+    padding-top: 50px;
+}
 
-/* line 4, /media/data/documents/Privat/prog/node/bedman/app/public/scss/style.scss */
 form.customer-form {
-  width: 50%; }
+    width: 50%;
+}
 
-/* line 10, /media/data/documents/Privat/prog/node/bedman/app/public/scss/style.scss */
 form.reservation-form select.customers {
-  width: 208px; }
-/* line 14, /media/data/documents/Privat/prog/node/bedman/app/public/scss/style.scss */
+    width: 200px;
+}
+
 form.reservation-form button.add-customer-btn {
-  height: 26px;
-  line-height: 13px; }
-/* line 19, /media/data/documents/Privat/prog/node/bedman/app/public/scss/style.scss */
+    height: 26px;
+    line-height: 13px;
+}
+
 form.reservation-form select {
-  margin-top: 10px; }
+    margin-top: 10px;
+}
 
-/* line 25, /media/data/documents/Privat/prog/node/bedman/app/public/scss/style.scss */
 button.delete-btn {
-  margin-top: 10px; }
-
-/*# sourceMappingURL=style.css.map */
+    margin-top: 10px;
+}
