@@ -25,7 +25,7 @@ describe( "Bills API", function() {
 
     it( "should save a valid Bill", function( done ) {
         
-        var r1 = testData.bills.r1.clone().attributes;
+        var r1 = Object.clone( testData.bills.r1, true );
 
         request( testsetup.appUrl )
             .post( "/api/bills" )
@@ -43,8 +43,7 @@ describe( "Bills API", function() {
             delete res.body.created_at;
             delete res.body.updated_at;
 
-            //compare the dates via date, not via strings
-            new Date( res.body.date ).should.eql( new Date( r1.date ) );
+            res.body.date.should.eql( r1.date );
             delete res.body.date;
             delete r1.date;
 
@@ -58,7 +57,7 @@ describe( "Bills API", function() {
     function testPresence( fieldName ) {
         it( "should require " + fieldName + " to be present", function( done ) {
 
-            var r1 = testData.bills.r1.clone().attributes;
+            var r1 = Object.clone( testData.bills.r1, true );
             delete r1[fieldName];
 
             request( testsetup.appUrl )
@@ -82,7 +81,7 @@ describe( "Bills API", function() {
 
     it( "should require price to be a valid price", function( done ) {
 
-        var r1 = testData.bills.r1.clone().attributes;
+        var r1 = Object.clone( testData.bills.r1, true );
         r1.price = "asdf";
 
         request( testsetup.appUrl )
@@ -101,9 +100,10 @@ describe( "Bills API", function() {
 
     it( "should perform validations on updates as well", function( done ) {
         
-        testData.bills.r1.save().then( function( savedR1 ) {
+        var r1 = new Bill( testData.bills.r1 );
+        r1.save().then( function( savedR1 ) {
             
-            var r1 = testData.bills.r1.clone().attributes;
+            var r1 = Object.clone( testData.bills.r1, true );
             r1.price = "asdf";
 
             request( testsetup.appUrl )
@@ -151,8 +151,8 @@ describe( "Bills API", function() {
 
     it( "should successfully delete existing bills", function( done ) {
         
-        testData.bills.r1.save( {}, {method: "insert"})
-                               .then( function( savedR1 ) {
+        var r1 = new Bill( testData.bills.r1 );
+        r1.save( {}, {method: "insert"} ).then( function( savedR1 ) {
             
             request( testsetup.appUrl )
                 .delete( "/api/bills/" + savedR1.id )

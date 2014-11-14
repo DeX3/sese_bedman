@@ -3,14 +3,32 @@
 <form ng-submit="save()" class="reservation-form">
     <div class="form-group">
         <div class="form-inline">
-            <label for="customer">CustomerIDs:</label></br>
-            <input type="text"
-                   name="customer"
-                   ng-model="reservation.customer"
-                   placeholder="CustomerID"
-                   class="form-control"
+            <label for="customers">Customers:</label></br>
+            <angucomplete-alt
+                id="customerSearch"
+                placeholder="Search customers..."
+                selected-object="selectedCustomer"
+                local-data="availableCustomers"
+                minlength="1"
+                search-fields="firstName,lastName"
+                title-field="firstName,lastName"
+                class="pull-left"
+                ng-keypress="onSearchKeyPress($event)"
+            ></angucomplete-alt>
+            <button type="button"
+                    ng-click="addCustomer()"
+                    ng-disabled="!selectedCustomer"
+                    class="btn btn-primary pull-left add-customer-btn">
+                +
+            </button>
+            <div class="clearfix"></div>
+            <select name="customers"
+                   ng-model="currentCustomer"
+                   ng-options="customer as customer.displayName() for customer in selectedCustomers"
+                   size="6"
+                   class="form-control customers"
                    required
-                   autofocus></input>
+            ></select>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -42,7 +60,7 @@
 
 </form>
 
-<pre class="debug">
-{{reservation | json}}
-</pre>
+<button class="btn delete-btn" ng-click="destroy()">
+    Delete this reservation
+</button>
 

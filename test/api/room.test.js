@@ -6,6 +6,7 @@ require( "should" );
 require( "assert" );
 require( "expect.js" );
 var request = require( "supertest" );
+require( "sugar" );
 
 var testsetup = require( "./testsetup" );
 var Room = testsetup.models.Room;
@@ -25,7 +26,7 @@ describe( "Room API", function() {
 
     it( "should save a valid Room", function( done ) {
         
-        var r = testData.rooms.a.clone().attributes;
+        var r = testData.rooms.a;
 
         request( testsetup.appUrl )
             .post( "/api/rooms" )
@@ -53,7 +54,7 @@ describe( "Room API", function() {
     function testPresence( fieldName ) {
         it( "should require " + fieldName + " to be present", function( done ) {
 
-            var r = testData.rooms.a.clone().attributes;
+            var r = Object.clone( testData.rooms.a, true );
             delete r[fieldName];
 
             request( testsetup.appUrl )
@@ -102,8 +103,8 @@ describe( "Room API", function() {
 
     it( "should successfully delete existing room", function( done ) {
         
-        testData.rooms.a.save( {}, {method: "insert"})
-                               .then( function( a ) {
+        var a = new Room( testData.rooms.a );
+        a.save( {}, {method: "insert"} ).then( function( a ) {
             
             request( testsetup.appUrl )
                 .delete( "/api/rooms/" + a.id )

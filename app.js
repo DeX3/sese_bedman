@@ -23,23 +23,19 @@ if( ["development",
 var express = require( "express" );
 var bodyParser = require( "body-parser" );
 var config = require( "config" );
-var knex = require( "knex" )( config.get( "db" ) );
-var fs = require( "fs" );
+var glob = require( "glob" );
 
 var routes = require( "./app/routes" );
 var models = require( "./app/models/models" );
 var controllers = require( "./app/controllers/controllers" );
 
-var bookshelf = require( "bookshelf" )( knex );
-
 var app = express();
-app.set( "bookshelf", bookshelf );
 
 app.use( config.get("logger") );
 
 app.use( bodyParser.json() );
 
-models.setup( app );
+app.set( "bookshelf", require("./app/models/base") );
 app.set( "models", models );
 
 controllers.setup( app );
@@ -48,12 +44,13 @@ app.set( "controllers", controllers );
 app.set( "views", "app/views" );
 app.set( "view engine", "ejs" );
 
-function filesIn( directory, suffix ) {
-    return fs.readdirSync( directory )
-             .filter( function( file ) {
-        return file.endsWith( suffix );
-     } );
-}
+var filesIn = function( directory, suffix ) {
+    var files = glob.sync( directory + "/**/*" + suffix  );
+    
+    return files.map( function( file ) {
+        return file.substring( directory.length+1 );
+    } );
+};
 
 app.locals.ngServices = filesIn( "app/public/services", ".js" );
 app.locals.ngControllers = filesIn( "app/public/controllers", ".js" );

@@ -5,3 +5,20 @@ body{
 form.customer-form {
     width: 50%;
 }
+
+form.reservation-form select.customers {
+    width: 200px;
+}
+
+form.reservation-form button.add-customer-btn {
+    height: 26px;
+    line-height: 13px;
+}
+
+form.reservation-form select {
+    margin-top: 10px;
+}
+
+button.delete-btn {
+    margin-top: 10px;
+}

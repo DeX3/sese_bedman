@@ -139,7 +139,7 @@ module.exports = function( grunt ) {
                 src: ["app.js",
                       "app/**/*.js",
                       "test/**/*.js",
-					  "!app/public/bower_components/**/*",
+                      "!app/public/bower_components/**/*",
                       "README.md"],
                 options: {
                     destination: "doc"
@@ -155,11 +155,11 @@ module.exports = function( grunt ) {
 
     //simple alias
     grunt.registerTask( "lint",
-						"Lint every project-owned JS-file",
-						"jshint" );
+                        "Lint every project-owned JS-file",
+                        "jshint" );
     grunt.registerTask( "doc",
-						"Generate project documentation in doc/",
-						"jsdoc" );
+                        "Generate project documentation in doc/",
+                        "jsdoc" );
 
     var envs = ["development", "test", "production"];
     var knexCommands = ["latest", "rollback", "currentVersion"];
@@ -168,8 +168,8 @@ module.exports = function( grunt ) {
     knexCommands.forEach( function(cmd) {
         envs.forEach( function(env) {
             grunt.registerTask( "migrate:" + env + ":" + cmd,
-								"Run the " + cmd + " command in " + env + 
-								" environment.",
+                                "Run the " + cmd + " command in " + env + 
+                                " environment.",
                                 [ "env:" + env, "knexmigrate:" + cmd ] );
         } );
     } );
@@ -177,7 +177,7 @@ module.exports = function( grunt ) {
     //register make migration task (this one doesn't need an environment)
     grunt.registerTask( "migrate:make",
                         "Create migration (usage: grunt " + 
-						"migrate:make:<migration_name>",
+                        "migrate:make:<migration_name>",
                         function( name ) {
         if( !name ) {
             throw new Error( "No migration name given! Specify like this: " + 
@@ -193,28 +193,28 @@ module.exports = function( grunt ) {
 
     //start the server in test setup and then run the tests
     grunt.registerTask( "test:api", 
-						"Run the API tests", 
-						["express:test", "mochaTest"] );
+                        "Run the API tests", 
+                        ["express:test", "mochaTest"] );
 
     grunt.registerTask( "test:api:coverage",
-						"Run the API tests and output coverage information",
-						["env:coverage",
-						  "express:test",
-						  "mochaTest",
-						  "curl:coverage",
-						  "unzip:coverage",
-						  "clean:coverageZip",
-						  "open:coverage"] );
+                        "Run the API tests and output coverage information",
+                        ["env:coverage",
+                          "express:test",
+                          "mochaTest",
+                          "curl:coverage",
+                          "unzip:coverage",
+                          "clean:coverageZip",
+                          "open:coverage"] );
 
     grunt.registerTask( "test:client", "test:client:single" );
 
     grunt.registerTask( "test:client:single",
-						"Run the client tests once",
-						"karma:single" );
+                        "Run the client tests once",
+                        "karma:single" );
 
     grunt.registerTask( "test:client:continuous",
-						"Run the client tests continuously",
-						"karma:continuous" );
+                        "Run the client tests continuously",
+                        "karma:continuous" );
 
     grunt.registerTask( "test",
                         "Run all tests",

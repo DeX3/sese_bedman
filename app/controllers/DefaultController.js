@@ -32,9 +32,8 @@ module.exports.get = function( Model, req, res ) {
 module.exports.create = function( Model, req, res ) {
 
     var data = Object.merge( req.body, req.query );
-    var model = new Model( data );
 
-    model.save().then( function( savedModel ) {
+    Model.forge( data ).save().then( function( savedModel ) {
         res.status( 201 ).json( savedModel );
     } ).catch( function(error) {
         res.status( 500 ).json( error );
@@ -68,7 +67,7 @@ module.exports.destroy = function( Model, req, res ) {
         if( !result ) {
             res.status( 404 ).send();
         } else {
-            result.destroy().then( function() {
+            return result.destroy().then( function() {
                 res.status( 200 ).send();
             } );
         }
