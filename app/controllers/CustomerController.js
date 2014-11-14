@@ -6,7 +6,6 @@ module.exports.setup = function( app ) {
 
     var models = app.get( "models" );
     var Customer = models.Customer;
-    //var Reservation = models.Reservation;
 
     var ctrl = {};
     ctrl.index = DefaultController.index.bind( null, Customer );
