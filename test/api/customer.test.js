@@ -13,6 +13,7 @@ var testsetup = require( "./testsetup" );
 var Customer = testsetup.models.Customer;
 var Reservation = testsetup.models.Reservation;
 
+var utils = require( "./testutils" );
 var testData = testsetup.testData;
 var bookshelf = testsetup.app.get( "bookshelf" );
 
@@ -64,31 +65,13 @@ describe( "Customer API", function() {
 
     } );
 
-    function testPresence( fieldName ) {
-        it( "should require " + fieldName + " to be present", function( done ) {
-
-            var c = Object.clone( testData.customers.john, true );
-            delete c[fieldName];
-
-            request( testsetup.appUrl )
-                .post( "/api/customers" )
-                .send( c )
-                .expect( 500 )
-                .end( function( err, res ) {
-
-                if( err ) { throw err; }
-
-                res.body.should.have.property( fieldName );
-
-                done();
-            } );
-        } );
-    }
+    var tester = new utils.PresenceTester( "/api/customers",
+                                           testData.customers.john );
     
-    testPresence( "firstName" );
-    testPresence( "lastName" );
-    testPresence( "company" );
-    testPresence( "email" );
+    tester.require( "firstName" );
+    tester.require( "lastName" );
+    tester.require( "company" );
+    tester.require( "email" );
 
     it( "should require email to be a valid email", function( done ) {
 
@@ -98,7 +81,7 @@ describe( "Customer API", function() {
         request( testsetup.appUrl )
             .post( "/api/customers" )
             .send( c )
-            .expect( 500 )
+            .expect( 400 )
             .end( function( err, res ) {
 
             if( err ) { throw err; }

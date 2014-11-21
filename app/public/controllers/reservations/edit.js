@@ -6,21 +6,18 @@ app.controller( "ReservationEditCtrl",
                           $routeParams,
                           $location,
                           Reservation,
+                          dialogs,
                           Customer ) {
 
     $scope.selectedCustomers = [];
     if( $routeParams.id === "create" ) {
         $scope.reservation = new Reservation();
-        $scope.reservation.newObject = true;
     } else {
-        Reservation.get(
-            { id: $routeParams.id } ).$promise.then( 
-            function( reservation ) {
+        Reservation.$get( $routeParams.id ).then( function( reservation ) {
             
             for( var i=0; i < reservation.customers.length ; i++ ) {
                 var c = reservation.customers[i];
-                c.displayName = Customer.prototype.displayName;
-                $scope.selectedCustomers.push( c );
+                $scope.selectedCustomers.push( new Customer(c) );
             }
             if( reservation.customers.length > 0 ) {
                 $scope.currentCustomer = $scope.selectedCustomers[0];
@@ -30,7 +27,10 @@ app.controller( "ReservationEditCtrl",
         } );
     }
 
-    $scope.availableCustomers = Customer.query();
+    Customer.$query().then( function( availableCustomers ) {
+        $scope.availableCustomers = availableCustomers;
+    } );
+
     $scope.addCustomer = function() {
         if( $scope.selectedCustomer ) {
             var customer = $scope.selectedCustomer.originalObject;
@@ -44,9 +44,6 @@ app.controller( "ReservationEditCtrl",
             $scope.$broadcast( "angucomplete-alt:clearInput",
                                "customerSearch" );
         }
-    };
-    Customer.prototype.displayName = function() {
-        return this.firstName + " " + this.lastName;
     };
 
     $scope.onSearchKeyPress = function( evt ) {
@@ -64,24 +61,19 @@ app.controller( "ReservationEditCtrl",
             $scope.reservation.customers.push( $scope.selectedCustomers[i].id );
         }
 
-        if( $scope.reservation.newObject ) {
-            delete $scope.reservation.newObject;
-            $scope.reservation.$save().then( function( reservation ) {
-                $location.path( "/reservations/" + reservation.id );
-            } ).catch( function() {
-                $scope.reservation.newObject = true;
-            } );
-            
-        } else {
-            $scope.reservation.$update().then( function( reservation ) {
-                $location.path( "/reservations/" + reservation.id );
-            } );
-        }
+        $scope.reservation.$save().then( function( reservation ) {
+            $location.path( "/reservations/" + reservation.id );
+        } ).catch( function() {
+            $scope.reservation.newObject = true;
+        } );
     };
 
     $scope.destroy = function() {
-        $scope.reservation.$delete().then( function() {
-            $location.path( "/reservations" );
+        
+        dialogs.confirm().then( function() {
+            $scope.reservation.$delete().then( function() {
+                $location.path( "/reservations" );
+            } );
         } );
     };
 } );

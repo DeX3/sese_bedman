@@ -10,10 +10,6 @@ var validator = new Checkit( {
 
 module.exports = bookshelf.model( "Room", {
     tableName: "rooms",
-    hasTimestamps: true,
-    initialize: function() {
-        this.on( "saving", this.validate );
-    },
     validate: function() {
         return validator.run( this.attributes );
     }

@@ -2,9 +2,17 @@
 
 var app = angular.module( "bedman" );
 
-app.factory( "Customer", function( $resource ) {
-    return $resource( "/api/customers/:id",
-                      { id: "@id" },
-                      { update: {method: "PUT"} }
+app.factory( "Customer", function( $Model ) {
+
+    return $Model.extend(
+        {
+            name: "Customer",
+            url: "/api/customers",
+        },
+        {
+            fullName: function() {
+                return this.firstName + " " + this.lastName;
+            }
+        }
     );
 } );

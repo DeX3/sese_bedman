@@ -29,15 +29,23 @@ app.directive('navMenu', function($location) {
         }
 
         scope.$on('$routeChangeStart', function() {
-            var pathLink = urlMap[$location.path()];
 
-            if (pathLink) {
-                if (currentLink) {
-                    currentLink.removeClass(onClass);
+            angular.forEach( urlMap, function( value, key ) {
+                
+                var rgx = new RegExp( "^" + key + ".*$" );
+                if( $location.path().match( rgx ) ) {
+
+                    var pathLink = value;
+                    if (pathLink) {
+                        if (currentLink) {
+                            currentLink.removeClass(onClass);
+                        }
+                        currentLink = pathLink;
+                        currentLink.addClass(onClass);
+                    }
                 }
-                currentLink = pathLink;
-                currentLink.addClass(onClass);
-            }
+            } );
+
         });
     };
 });

@@ -24,7 +24,8 @@
             <div class="clearfix"></div>
             <select name="customers"
                    ng-model="currentCustomer"
-                   ng-options="customer as customer.displayName() for customer in selectedCustomers"
+                   ng-options="customer as customer.fullName()
+                               for customer in selectedCustomers"
                    size="6"
                    class="form-control customers"
                    required

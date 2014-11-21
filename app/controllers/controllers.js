@@ -1,3 +1,9 @@
+/**
+ * @file Provides a `setup`-function, that will set up all controllers, i.e. all
+ * files that reside in the same directory as this file, that end in `".js"`.
+ * 
+ * @namespace controllers
+ */
 "use strict";
 
 var fs = require( "fs" );
@@ -6,6 +12,13 @@ require( "colors" );
 
 require( "string.prototype.endswith" );
 
+/**
+ * Will add a controller to this module for each `.js` file residing in the same
+ * directory as this file. The controller will have the same name as the
+ * `js`-file, excluding its file-ending.
+ *
+ * @memberof controllers
+ */
 module.exports.setup = function( app ) {
     var files = fs.readdirSync( __dirname );
 

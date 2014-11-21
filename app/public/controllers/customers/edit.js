@@ -5,27 +5,35 @@ app.controller( "CustomerEditCtrl",
                 function( $scope,
                           $routeParams,
                           $location,
+                          dialogs,
                           Customer ) {
 
     if( $routeParams.id === "create" ) {
         $scope.customer = new Customer();
-        $scope.customer.newObject = true;
     } else {
-        $scope.customer = Customer.get( { id: $routeParams.id } );
+        Customer.$get( $routeParams.id ).then( function(customer) {
+            $scope.customer = customer;
+        } );
     }
 
     $scope.save = function() {
-        if( $scope.customer.newObject ) {
-            delete $scope.customer.newObject;
-            $scope.customer.$save();
-        } else {
-            $scope.customer.$update();
-        }
-    };
 
-    $scope.destroy = function() {
-        $scope.customer.$delete().then( function() {
+        $scope.customer.$save().then( function() {
             $location.path( "/customers" );
         } );
     };
+
+    $scope.destroy = function() {
+
+        dialogs.confirm(
+            "Do you really want to delete" + $scope.customer.fullName() + "?"
+        ).then( function(result) {
+
+            $scope.customer.$delete().then( function() {
+                $location.path( "/customers" );
+            } );
+
+        } );
+    };
+
 } );

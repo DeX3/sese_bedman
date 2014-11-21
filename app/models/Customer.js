@@ -14,7 +14,6 @@ var validator = new Checkit( {
 
 module.exports = bookshelf.model( "Customer", {
     tableName: "customers",
-    hasTimestamps: true,
     reservations: function() {
         return this.belongsToMany( "Reservation" );
     },
