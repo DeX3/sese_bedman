@@ -116,6 +116,9 @@ module.exports = function( grunt ) {
             },
             continuous: {
                 configFile: "test/client/karma.conf.js",
+                reporters: ["mocha"],
+                preprocessors: null,
+                coverageReporter: null
             }
         },
         curl: {
@@ -142,7 +145,11 @@ module.exports = function( grunt ) {
                       "!app/public/bower_components/**/*",
                       "README.md"],
                 options: {
-                    destination: "doc"
+                    destination: "doc",
+                    template: "node_modules/grunt-jsdoc/node_modules/" + 
+                              "ink-docstrap/template",
+                    configure: "node_modules/grunt-jsdoc/node_modules/" + 
+                                "ink-docstrap/template/jsdoc.conf.json"
                 }
             }
         },

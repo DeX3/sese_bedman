@@ -1,6 +1,7 @@
 "use strict";
 
 require( "sugar" );
+var CheckitError = require( "checkit" ).Error;
 
 module.exports.setup = function( app ) {
 };
@@ -35,7 +36,10 @@ module.exports.create = function( Model, req, res ) {
 
     Model.forge( data ).save().then( function( savedModel ) {
         res.status( 201 ).json( savedModel );
+    } ).catch( CheckitError, function( error ) {
+        res.status( 400 ).json( error );
     } ).catch( function(error) {
+        console.error( error );
         res.status( 500 ).json( error );
     } );
 };
@@ -53,7 +57,10 @@ module.exports.update = function( Model, req, res ) {
                 res.status( 200 ).json( savedModel );
             } );
         }
+    } ).catch( CheckitError, function( error ) {
+        res.status( 400 ).json( error );
     } ).catch( function( error ) {
+        console.error( error );
         res.status( 500 ).json( error );
     } );
 };

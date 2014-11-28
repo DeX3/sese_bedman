@@ -60,7 +60,7 @@ describe( "Room API", function() {
             request( testsetup.appUrl )
                 .post( "/api/rooms" )
                 .send( r )
-                .expect( 500 )
+                .expect( 400 )
                 .end( function( err, res ) {
 
                 if( err ) { throw err; }

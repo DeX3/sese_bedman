@@ -6,5 +6,7 @@ app.controller( "CustomerListCtrl",
                 function( $scope,
                           Customer ) {
 
-    $scope.customers = Customer.query();
+    Customer.$query().then( function(customers) {
+        $scope.customers = customers;
+    } );
 } );

@@ -90,8 +90,8 @@ include:
   key.
 * `test`: Start the application in the `test`-environment and perform the tests.
 * `lint`: Simply lint all javascript files and print results to stdout.
-* `doc`: Generate documentation. If you're looking at this in a webbrowser, you
-  already did this, yay! Documentation will be put into `doc/`.
+* `doc`: Generate documentation. If you're looking at this in a webbrowser,
+  chances are, you already did this, yay! Documentation will be put into `doc/`.
 * `express:<env>` for `<env>` use `development`, `production` or `test` to start
   the app in the according environment. Use `express:production` to start the
   application in production mode!
@@ -153,10 +153,7 @@ Example for configuring a mysql server:
     
 Models
 ------
-Models reside in the `app/models` directory. All files placed there will
-automatically be loaded by `app/models/models.js`, which is required by
-`app.js`. Models are made available to the rest of the app via `app.get(
-"models" )` which will retrieve a hash of bookshelf-models.
+Models reside in the `app/models` directory.
 
 ### What a model should look like
 The application expects models to be a node.js-module whose `exports`-object is
@@ -164,18 +161,13 @@ a function returning a single bookshelf.js-Model. So typically, your models will
 look like this:
 
     "use strict";
+    var bookshelf = require( "./base" );
 
-    module.exports = function( app ) {
+    module.exports = bookshelf.model( "Cat", {
+        tableName: "cats"
+        /* ... */
+    } );
 
-        var bookshelf = app.get( "bookshelf" );     //get bookshelf from the app
-
-        var Cat = bookshelf.Model.extend( {
-            tableName: "cats",
-            hasTimestamps: true
-        } );
-
-        return Cat;
-    };
 
 For more info on how to define bookshelf.js-models see
 http://bookshelfjs.org/#Model.
@@ -222,7 +214,6 @@ This will perform the given command for the specified environment
 
 Tests
 -----
-
 Tests can be run via `grunt test`. All tests must be placed inside `test/` and
 have the suffix `.test.js`.
 

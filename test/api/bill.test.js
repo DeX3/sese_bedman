@@ -8,6 +8,7 @@ require( "expect.js" );
 var request = require( "supertest" );
 
 var testsetup = require( "./testsetup" );
+var utils = require( "./testutils" );
 var Bill = testsetup.models.Bill;
 
 var testData = testsetup.testData;
@@ -54,30 +55,12 @@ describe( "Bills API", function() {
 
     } );
 
-    function testPresence( fieldName ) {
-        it( "should require " + fieldName + " to be present", function( done ) {
-
-            var r1 = Object.clone( testData.bills.r1, true );
-            delete r1[fieldName];
-
-            request( testsetup.appUrl )
-                .post( "/api/bills" )
-                .send( r1 )
-                .expect( 500 )
-                .end( function( err, res ) {
-
-                if( err ) { throw err; }
-
-                res.body.should.have.property( fieldName );
-
-                done();
-            } );
-        } );
-    }
     
-    testPresence( "price" );
-    testPresence( "date" );
-    testPresence( "billId" );
+    var tester = new utils.PresenceTester( "/api/bills",
+                                           testData.bills.r1 );
+    tester.require( "price" );
+    tester.require( "date" );
+    tester.require( "billId" );
 
     it( "should require price to be a valid price", function( done ) {
 
@@ -87,7 +70,7 @@ describe( "Bills API", function() {
         request( testsetup.appUrl )
             .post( "/api/bills" )
             .send( r1 )
-            .expect( 500 )
+            .expect( 400 )
             .end( function( err, res ) {
 
             if( err ) { throw err; }
@@ -109,7 +92,7 @@ describe( "Bills API", function() {
             request( testsetup.appUrl )
                 .put( "/api/bills/" + savedR1.id )
                 .send( r1 )
-                .expect( 500 )
+                .expect( 400 )
                 .end( function( err, res ) {
 
                 if( err ) { throw err; }

@@ -1,37 +1,28 @@
 "use strict";
 
-window.testutils = {
-    mockResource: function( $q, mockData ) {
+/* jshint freeze: false */
+/* jshint newcap: false */
 
-        var Resource = chai.spy( function() {
-
-            this.$save = chai.spy( function() {
-                var deferred = $q.defer();
-                deferred.resolve();
-                return deferred.promise;
-            } );
-
-            this.$update = chai.spy( function() {
-                var deferred = $q.defer();
-                deferred.resolve();
-                return deferred.promise;
-            } );
-        } );
-
-        Resource.get = chai.spy( function() {
-            var deferred = $q.defer();
-            deferred.resolve( mockData[0] );
-
-            var ret = {};
-            ret.$promise = deferred.promise;
-            return ret;
-        } );
-
-        Resource.query = chai.spy( function() {
-            return mockData;
-        } );
-
-        return Resource;
+//polyfill for func.bind() (missing in phantomJS)
+if(!Function.prototype.bind) {
+  Function.prototype.bind = function(oThis) {
+    if (typeof this !== 'function') {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
     }
 
-};
+    var aArgs   = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP    = function() {},
+        fBound  = function() {
+          return fToBind.apply(this instanceof fNOP && oThis ? this : oThis,
+                 aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
+}

@@ -8,13 +8,8 @@ var validator = new Checkit( {
     billId: "required"
 } );
 
-module.exports = bookshelf.Model.extend( {
+module.exports = bookshelf.model( "Bill", {
     tableName: "bills",
-    hasTimestamps: true,
-    initialize: function() {
-        bookshelf.Model.prototype.initialize.apply( this, arguments );
-        this.on( "saving", this.validate );
-    },
     validate: function() {
         return validator.run( this.attributes );
     }

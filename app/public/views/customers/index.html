@@ -3,7 +3,7 @@
 <li ng-show="customers.length" ng-repeat="customer in customers">
     <ul>
         <a href="#/customers/{{customer.id}}">
-            {{customer.firstName}} {{customer.lastName}}
+            {{customer.fullName()}}
         </a>
     </ul>
 </li>

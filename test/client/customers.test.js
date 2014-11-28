@@ -4,111 +4,140 @@
 
 describe( "Customer controllers", function() {
 
-    beforeEach(    module("bedman") );
+    beforeEach( module("bedman") );
+
+    afterEach( inject( function( $httpBackend ) {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    } ) );
 
     describe( "CustomerListCtrl", function() {
         it( "should exist",
-            inject( function( $controller, $rootScope ) {
+            inject( function( $controller,
+                              $rootScope,
+                              $httpBackend,
+                              Customer ) {
 
-            var mockedParams = mockParamsList( $controller, $rootScope );
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
 
-            var ctrl = $controller( "CustomerListCtrl", mockedParams );
+            var ctrl = $controller( "CustomerListCtrl", {
+                $scope: $rootScope.$new(),
+                Customer: Customer
+            } );
+
+            $httpBackend.flush();
+
             chai.expect( ctrl ).to.exist;
         } ) );
 
         it( "should provide a customers array",
-            inject( function( $controller, $rootScope ) {
+            inject( function( $controller,
+                              $rootScope,
+                              $httpBackend,
+                              Customer ) {
 
-            var mockedParams = mockParamsList( $controller, $rootScope );
-            $controller( "CustomerListCtrl", mockedParams );
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
 
-            chai.expect( mockedParams.$scope.customers ).to.exist;
-            chai.expect( mockedParams.$scope.customers ).to.be.empty;
-            chai.expect( mockedParams.Customer.query ).to.have.been.called();
+            var scope = $rootScope.$new();
+            $controller( "CustomerListCtrl", {
+                $scope: scope,
+                Customer: Customer
+            } );
+
+            $httpBackend.flush();
+
+            chai.expect( scope.customers ).to.exist;
+            chai.expect( scope.customers ).to.be.empty;
         } ) );
     } );
 
     describe( "CustomerEditCtrl", function() {
 
         it( "should exist",
-            inject( function( $controller, $rootScope ) {
+            inject( function( $controller,
+                              $rootScope,
+                              $location,
+                              $httpBackend,
+                              Customer ) {
 
-            var mockedParams = mockParamsEdit( $controller,
-                                               $rootScope,
-                                               { id: "create" } );            
-            var ctrl = $controller( "CustomerEditCtrl", mockedParams );
+            var ctrl = $controller( "CustomerEditCtrl", {
+                $scope: $rootScope.$new(),
+                $routeParams: { id: "create" },
+                $location: $location,
+                Customer: Customer
+            } );
             chai.expect( ctrl ).to.exist;
         } ) );
 
         it( "should create a new customer",
-            inject( function( $controller, $rootScope ) {
+            inject( function( $controller,
+                              $rootScope,
+                              $location,
+                              $httpBackend,
+                              Customer ) {
 
-            var mockedParams = mockParamsEdit( $controller,
-                                               $rootScope,
-                                               { id: "create" } );
-            $controller( "CustomerEditCtrl", mockedParams );
+            var scope = $rootScope.$new();
 
-            chai.expect( mockedParams.$scope.customer ).to.exist;
-            chai.expect( mockedParams.Customer ).to.have.been.called();
+            $controller( "CustomerEditCtrl", {
+                $scope: scope,
+                $routeParams: { id: "create" },
+                $location: $location,
+                Customer: Customer
+            } );
+
+            chai.expect( scope.customer ).to.exist;
         } ) );
 
         it( "should provide an existing customer",
-            inject( function( $controller, $rootScope ) {
+            inject( function( $controller,
+                              $rootScope,
+                              $location,
+                              $httpBackend,
+                              Customer ) {
 
-            var mockedParams = mockParamsEdit( $controller,
-                                               $rootScope,
-                                               { id: 4711 } );
-            $controller( "CustomerEditCtrl", mockedParams );
+            $httpBackend.when( "GET", "/api/customers/4711" )
+                        .respond( { id: 4711 } );
 
-            chai.expect( mockedParams.$scope.customer ).to.exist;
-            chai.expect( mockedParams.Customer ).to.not.have.been.called();
-            chai.expect( mockedParams.Customer.get ).to.have.been.called.with(
-                { id: 4711 }
-            );
+            var scope = $rootScope.$new();
+            $controller( "CustomerEditCtrl", {
+                $scope: scope,
+                $routeParams: { id: 4711 },
+                $location: $location,
+                Customer: Customer
+            } );
 
-            chai.expect( mockedParams.$scope.customer.id ).to.equal( 4711 );
+            $httpBackend.flush();
+
+            chai.expect( scope.customer ).to.exist;
+            chai.expect( scope.customer.id ).to.equal( 4711 );
 
         } ) );
 
         it( "should provide a save method to save a customer",
-            inject( function( $controller, $rootScope ) {
+            inject( function( $controller,
+                              $rootScope,
+                              $location,
+                              $httpBackend,
+                              Customer ) {
 
-            var mockedParams = mockParamsEdit( $controller,
-                                               $rootScope,
-                                               { id: "create" } );
-            $controller( "CustomerEditCtrl", mockedParams );
-            mockedParams.$scope.save();
+            var scope = $rootScope.$new();
 
-            chai.expect( mockedParams.Customer ).to.have.been.called();
-            chai.expect(
-                mockedParams.$scope.customer.$save
-            ).to.have.been.called();
+            $controller( "CustomerEditCtrl", {
+                $scope: scope,
+                $routeParams: { id: "create" },
+                $location: $location,
+                Customer: Customer
+            } );
+
+            $httpBackend.when( "POST", "/api/customers" )
+                        .respond( { id: 4711 } );
+
+            scope.save();
+
+            $httpBackend.flush();
         } ) );
     } );
 
-    function mockParamsList( controller, rootScope ) {
-        
-        var ret = {
-            $scope: rootScope.$new(),
-            Customer: chai.spy()
-        };
-        
-        ret.Customer.query = chai.spy( function() {
-            return [];
-        } );
-
-        return ret;
-    }
-
-    function mockParamsEdit( controller, rootScope, routeParams ) {
-        var ret = mockParamsList( controller, rootScope );
-
-        ret.$routeParams = routeParams;
-        ret.Customer.get = chai.spy( function( criteria ) {
-            return criteria;
-        } );
-        ret.Customer.prototype.$save = chai.spy();
-
-        return ret;
-    }
 } );

@@ -6,5 +6,7 @@ app.controller( "ReservationListCtrl",
                 function( $scope,
                           Reservation ) {
 
-    $scope.reservations = Reservation.query();
+    Reservation.$query().then( function( reservations ) {
+        $scope.reservations = reservations;
+    } );
 } );

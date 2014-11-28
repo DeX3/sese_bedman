@@ -8,6 +8,7 @@ require( "expect.js" );
 var request = require( "supertest" );
 
 var testsetup = require( "./testsetup" );
+var utils = require( "./testutils" );
 var Reservation = testsetup.models.Reservation;
 var Customer = testsetup.models.Customer;
 var bookshelf = testsetup.app.get( "bookshelf" );
@@ -58,30 +59,11 @@ describe( "Reservation API", function() {
 
     } );
 
-    function testPresence( fieldName ) {
-        it( "should require " + fieldName + " to be present", function( done ) {
+    var tester = new utils.PresenceTester( "/api/reservations",
+                                           testData.reservations.a );
 
-            var c = Object.clone( testData.reservations.a, true );
-            delete c[fieldName];
-
-            request( testsetup.appUrl )
-                .post( "/api/reservations" )
-                .send( c )
-                .expect( 500 )
-                .end( function( err, res ) {
-
-                if( err ) { throw err; }
-
-                res.body.should.have.property( fieldName );
-
-                done();
-            } );
-        } );
-    }
-    
-    testPresence( "room" );
-    //testPresence( "discount" );
-    testPresence( "roomCost" );
+    tester.require( "room" );
+    tester.require( "roomCost" );
 
     it( "should perform validations on updates as well", function( done ) {
         
@@ -94,7 +76,7 @@ describe( "Reservation API", function() {
             request( testsetup.appUrl )
                 .put( "/api/reservations/" + savedJohn.id )
                 .send( c )
-                .expect( 500 )
+                .expect( 400 )
                 .end( function( err, res ) {
 
                 if( err ) { throw err; }
