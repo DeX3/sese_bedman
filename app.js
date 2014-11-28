@@ -80,7 +80,6 @@ if( config.has("additionalMiddleware") ) {
     //not exactly nice, but it works, so meh...
     var middlewares = config.get( "additionalMiddleware" );
     Object.each( middlewares, function( route, middleware ) {
-        var middleware = middlewares[route];
         app.use( route, middleware );
     } );
 }

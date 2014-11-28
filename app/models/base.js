@@ -21,7 +21,7 @@
 var config = require( "config" );
 var knex = require( "knex" )( config.get( "db" ) );
 var bookshelf = require( "bookshelf" )( knex );
-var Promise = require( "bluebird" );
+var BPromise = require( "bluebird" );
 require( "sugar" );
 
 bookshelf.plugin( "registry" );
@@ -167,5 +167,5 @@ bookshelf.Model.extend = function( options ) {
 module.exports = bookshelf;
 
 module.exports.onSchemaLoaded = function( callback ) {
-    Promise.all( schemaPromises ).then( callback );
+    BPromise.all( schemaPromises ).then( callback );
 };
