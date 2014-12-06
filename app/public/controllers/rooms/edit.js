@@ -10,11 +10,15 @@ app.controller( "RoomEditCtrl",
     if( $routeParams.id === "create" ) {
         $scope.room = new Room();
     } else {
-        $scope.room = Room.get( { id: $routeParams.id } );
+        Room.$get( $routeParams.id ).then( function(room) {
+            $scope.room = room;
+        } );
     }
 
     $scope.save = function() {
-        $scope.room.$save();
+        $scope.room.$save().then( function() {
+            $location.path( "/rooms" );
+        } );
     };
 
     $scope.destroy = function() {
