@@ -6,5 +6,7 @@ app.controller( "RoomListCtrl",
                 function( $scope,
                           Room ) {
 
-    $scope.rooms = Room.query();
+    Room.$query().then( function( rooms ) {
+        $scope.rooms = rooms;
+    } );
 } );
