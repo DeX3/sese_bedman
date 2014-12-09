@@ -27,6 +27,16 @@
                ng-model-options="{ timezone: 'UTC' }"
                class="form-control"></input>
     </div>
+    <div class="form-group">
+        <label for="customer_id">Customer:</label>
+        <select name="customer_id"
+               ng-model="selectedCustomer"
+               ng-options="customer.fullName() for customer in customers"
+               required
+               class="form-control"></select>
+        <span>{{selectedCustomer.lastName}}</span>
+    </div>
+
     <input type="submit" class="btn btn-primary"></input>
 </form>
 

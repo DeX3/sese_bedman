@@ -6,7 +6,7 @@ app.controller( "BillsEditCtrl",
                           $routeParams,
                           $location,
                           DateService,
-                          Bill ) {
+                          Bill,Customer ) {
 
     if( $routeParams.id === "create" ) {
         $scope.bill = new Bill();
@@ -35,6 +35,8 @@ app.controller( "BillsEditCtrl",
                 $location.path( "/bills/" + bill.id );
             } );
         }
+        
+
     };
 
     $scope.destroy = function() {
@@ -42,4 +44,8 @@ app.controller( "BillsEditCtrl",
             $location.path( "/bills" );
         } );
     };
+    
+    Customer.$query().then( function(customers) {
+        $scope.customers = customers;
+    } );
 } );
