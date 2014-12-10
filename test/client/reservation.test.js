@@ -63,7 +63,8 @@ describe( "Reservation controllers", function() {
                               $location,
                               $httpBackend,
                               Reservation,
-                              Customer ) {
+                              Customer,
+                              Bill ) {
 
             $httpBackend.when( "GET", "/api/customers" )
                         .respond( [] );
@@ -74,9 +75,13 @@ describe( "Reservation controllers", function() {
                 $routeParams: { id: "create" },
                 $location: $location,
                 Reservation: Reservation,
-                Customer: Customer
+                Customer: Customer,
+                Bill:Bill
             } );
 
+
+            $httpBackend.when( "GET", "/api/bills" )
+                        .respond( [] );
             $httpBackend.flush();
             
             chai.expect( ctrl ).to.exist;
@@ -88,7 +93,8 @@ describe( "Reservation controllers", function() {
                               $location,
                               $httpBackend,
                               Reservation,
-                              Customer ) {
+                              Customer,
+                              Bill ) {
 
             $httpBackend.when( "GET", "/api/customers" )
                         .respond( [] );
@@ -99,9 +105,12 @@ describe( "Reservation controllers", function() {
                 $routeParams: { id: "create" },
                 $location: $location,
                 Reservation: Reservation,
-                Customer: Customer
+                Customer: Customer,
+                Bill:Bill
             } );
 
+            $httpBackend.when( "GET", "/api/bills" )
+                        .respond( [] );
             $httpBackend.flush();
 
             chai.expect( scope.reservation ).to.exist;
@@ -131,6 +140,8 @@ describe( "Reservation controllers", function() {
                 Customer: Customer
             } );
 
+            $httpBackend.when( "GET", "/api/bills" )
+                        .respond( [] );
             $httpBackend.flush();
         
             chai.expect( scope.reservation ).to.exist;
@@ -163,6 +174,8 @@ describe( "Reservation controllers", function() {
                 Customer: Customer
             } );
 
+            $httpBackend.when( "GET", "/api/bills" )
+                        .respond( [] );
             $httpBackend.flush();
 
             chai.expect( scope.save ).to.be.a( "function" );
@@ -193,6 +206,8 @@ describe( "Reservation controllers", function() {
                 Customer: Customer
             } );
 
+            $httpBackend.when( "GET", "/api/bills" )
+                        .respond( [] );
             $httpBackend.flush();
 
             chai.expect( scope.availableCustomers ).to.exist;
