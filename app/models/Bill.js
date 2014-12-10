@@ -11,8 +11,8 @@ var validator = new Checkit( {
 
 module.exports = bookshelf.model( "Bill", {
     tableName: "bills",
-    cutsomer: function(){
-	return this.belongsTo("Customer");
+    customer: function(){
+        return this.belongsTo("Customer");
     },
     validate: function() {
         return validator.run( this.attributes );

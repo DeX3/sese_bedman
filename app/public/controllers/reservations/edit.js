@@ -8,7 +8,6 @@ app.controller( "ReservationEditCtrl",
                           Reservation,
                           dialogs,
                           Customer,
-                          Bill,
                           Room) {
 
     $scope.selectedCustomers = [];
@@ -156,8 +155,4 @@ app.controller( "ReservationEditCtrl",
         } );
     };
     
-    Bill.$query().then( function(bills){
-        $scope.bills = bills;
-    });
-
 } );

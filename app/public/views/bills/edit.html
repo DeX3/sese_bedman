@@ -30,7 +30,7 @@
     <div class="form-group">
         <label for="customer_id">Customer:</label>
         <select name="customer_id"
-               ng-model="selectedCustomer"
+               ng-model="bill.customer"
                ng-options="customer.fullName() for customer in customers"
                required
                class="form-control"></select>
@@ -43,3 +43,4 @@
     Delete this bill
 </button>
 
+<pre class="debug">{{bill|json}}</pre>

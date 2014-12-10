@@ -8,6 +8,6 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema.table("reservation",function(table){
-      table.dropColumn("reservation_id");
+      table.dropColumn("bill_id");
   });
 };

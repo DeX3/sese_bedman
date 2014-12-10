@@ -42,12 +42,18 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
+
             var ctrl = $controller( "BillsEditCtrl", {
                 $scope: $rootScope.$new(),
                 $routeParams: { id: "create" },
                 $location: $location,
                 Bill: Bill
             } );
+
+            $httpBackend.flush();
+
             chai.expect( ctrl ).to.exist;
         } ) );
 
@@ -58,6 +64,9 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
+
             var scope = $rootScope.$new();
 
             $controller( "BillsEditCtrl", {
@@ -66,6 +75,8 @@ describe( "Bills controllers", function() {
                 $location: $location,
                 Bill: Bill
             } );
+
+            $httpBackend.flush();
 
             chai.expect( scope.bill ).to.exist;
         } ) );
@@ -77,6 +88,9 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
+
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
             $httpBackend.when( "GET", "/api/bills/4711" )
                         .respond( { id: 4711 } );
 
@@ -102,6 +116,12 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
+            $httpBackend.when( "POST", "/api/bills" )
+                        .respond( { id: 4711, 
+                                    customer: {} } );
+
             var scope = $rootScope.$new();
 
             $controller( "BillsEditCtrl", {
@@ -111,8 +131,7 @@ describe( "Bills controllers", function() {
                 Bill: Bill
             } );
 
-            $httpBackend.when( "POST", "/api/bills" )
-                        .respond( { id: 4711 } );
+            $httpBackend.flush();
 
             scope.save();
 
@@ -125,6 +144,9 @@ describe( "Bills controllers", function() {
                               $location,
                               $httpBackend,
                               Bill ) {
+
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
 
             $httpBackend.when( "GET", "/api/bills/4711" )
                         .respond( { id: 4711 } );

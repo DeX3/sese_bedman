@@ -17,7 +17,10 @@ module.exports = bookshelf.model( "Customer", {
     reservations: function() {
         return this.belongsToMany( "Reservation" );
     },
+    bills: function() {
+        return this.hasMany( "bills" );
+    },
     validate: function() {
         return validator.run( this.attributes );
-    }
+    },
 } );
