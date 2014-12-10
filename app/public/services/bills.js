@@ -2,11 +2,12 @@
 
 var app = angular.module( "bedman" );
 
-app.factory( "Bill", function( $resource, DateService ) {
+app.factory( "Bill", function( $Model ) {
 
-    return $resource( "/api/bills/:id", { id: "@id" }, {
-        update: {
-            method: "PUT"
+    return $Model.extend(
+        {
+            name: "Bill",
+            url: "/api/bills",
         }
-    } );
+    );
 } );

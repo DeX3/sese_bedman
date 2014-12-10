@@ -7,7 +7,8 @@ app.controller( "ReservationEditCtrl",
                           $location,
                           Reservation,
                           dialogs,
-                          Customer ) {
+                          Customer,
+                          Bill) {
 
     $scope.selectedCustomers = [];
     if( $routeParams.id === "create" ) {
@@ -76,4 +77,9 @@ app.controller( "ReservationEditCtrl",
             } );
         } );
     };
+    
+    Bill.$query().then( function(bills){
+        $scope.bills = bills;
+    });
+
 } );

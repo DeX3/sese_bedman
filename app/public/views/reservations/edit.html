@@ -57,6 +57,14 @@
                ng-model="reservation.roomCost"
                class="form-control"></input>
     </div>
+    <div class="form-group">
+        <label for="bill_id">Bill:</label>
+        <select name="bill_id"
+               ng-model="selectedBill"
+               ng-options="bill.billId for bill in bills"
+               required
+               class="form-control"></select>
+    </div> 
     <input type="submit" class="btn btn-primary"></input>
 
 </form>
