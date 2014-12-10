@@ -13,20 +13,34 @@ module.exports.setup = function( app ) {
     ctrl.index = DefaultController.index.bind( null, Reservation );
     ctrl.destroy = DefaultController.destroy.bind( null, Reservation );
 
-    var updateCustomers = function( tx, customers, reservation ) {
+    var updateRelation = function( tx, relationName, data, reservation ) {
+        
+        if( typeof data !== "undefined" ) {
+            return reservation.related(
+                relationName
+            ).fetch( {transacting: tx} ).then( function( fetchedList ) {
 
-        if( typeof customers !== "undefined" ) {
-            reservation.customers().forEach( function( customer ) {
-                reservation.customers().detach( customer, {transacting: tx} );
-            } );
+                fetchedList.forEach( function( fetched ) {
+                    return reservation[relationName]().detach(
+                        fetched,
+                        { transacting: tx } 
+                    );
+                } );
 
-            customers.forEach( function( customer ) {
-                reservation.customers().attach( customer, {transacting: tx} );
+                data.forEach( function( toAttach ) {
+                    reservation[relationName]().attach(
+                        toAttach,
+                        { transacting: tx }
+                    );
+                } );
+
+                return reservation;
             } );
         }
 
         return reservation;
     };
+
 
     ctrl.update = function( req, res ) {
 
@@ -36,7 +50,7 @@ module.exports.setup = function( app ) {
         bookshelf.transaction( function( tx ) {
 
             return Reservation.where( { id: id } ).fetch( 
-                { transacting: tx, withRelated: "customers" }
+                { transacting: tx, withRelated: ["customers", "rooms"] }
             ).then( function( reservation ) {
                 if( !reservation ) {
                     res.status( 404 ).send();
@@ -44,12 +58,16 @@ module.exports.setup = function( app ) {
 
                     var customers = data.customers;
                     delete data.customers;
+                    var rooms = data.rooms;
+                    delete data.rooms;
 
                     return reservation.save( data, {
                         patch: true,
                         transacting: tx
                     } ).then(
-                        updateCustomers.bind(null, tx, customers)
+                        updateRelation.bind( null, tx, "customers", customers )
+					).then(
+						updateRelation.bind( null, tx, "rooms", rooms )
                     ).then( function( reservation ) {
                         res.status( 200 ).json( reservation );
                     } );
@@ -69,10 +87,14 @@ module.exports.setup = function( app ) {
         var data = Object.merge( req.body, req.query );
         var customers = data.customers;
         delete data.customers;
+		var rooms = data.rooms;
+        delete data.rooms;
 
         bookshelf.transaction( function(tx) {
             return Reservation.forge( data ).save( {transacting: tx} ).then(
-                updateCustomers.bind( null, tx, customers )
+                    updateRelation.bind( null, tx, "customers", customers )
+				).then(
+                    updateRelation.bind( null, tx, "rooms", rooms )
             );
         } ).then( function( reservation ) {
             res.status( 201 ).json( reservation );
@@ -89,7 +111,7 @@ module.exports.setup = function( app ) {
         var id = req.params.id;
 
         Reservation.where( {id: id} ).fetch(
-            { withRelated: "customers" }
+            { withRelated: ["customers","rooms"]}
         ).then( function( result ) {
             if( !result ) {
                 res.status( 404 ).send();

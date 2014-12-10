@@ -1,9 +1,9 @@
 <h1>Edit reservation</h1>
 
 <form ng-submit="save()" class="reservation-form">
-    <div class="form-group">
-        <div class="form-inline">
-            <label for="customers">Customers:</label></br>
+    <div class="customer-group">
+        <label for="customers">Customers:</label></br>
+        <div class="input-group">
             <angucomplete-alt
                 id="customerSearch"
                 placeholder="Search customers..."
@@ -12,36 +12,60 @@
                 minlength="1"
                 search-fields="firstName,lastName"
                 title-field="firstName,lastName"
-                class="pull-left"
                 ng-keypress="onSearchKeyPress($event)"
-            ></angucomplete-alt>
-            <button type="button"
-                    ng-click="addCustomer()"
-                    ng-disabled="!selectedCustomer"
-                    class="btn btn-primary pull-left add-customer-btn">
-                +
-            </button>
-            <div class="clearfix"></div>
-            <select name="customers"
-                   ng-model="currentCustomer"
-                   ng-options="customer.fullName()
-                               for customer in customers"
-                   size="6"
-                   class="form-control customers"
-                   required
-            ></select>
+                class="customer-selector">
+            </angucomplete-alt>
+            <span class="input-group-btn">
+                <button type="button"
+                        ng-click="addCustomer()"
+                        ng-disabled="!selectedCustomer"
+                        class="btn btn-primary pull-left add-customer-btn">
+                    +
+                </button>
+            </span>
         </div>
+        <div class="clearfix"></div>
+        <select name="customers"
+               ng-model="currentCustomer"
+               ng-options="customer as customer.fullName()
+                           for customer in selectedCustomers"
+               size="6"
+               class="form-control customers"
+               ng-keydown="onCustomersKeyDown($event)"
+               required
+        ></select>
+    </div>
+    <div class="room-group">
+        <label for="room">Rooms:</label>
+        <div class="input-group">
+            <select name="rooms"
+                   ng-model="selectedRoom"
+                   placeholder="Select room..."
+                   required
+                   ng-options="room as room.name for room in availableRooms"
+                   class="form-control rooms-selector"
+                   ></select>
+            <span class="input-group-btn">
+                <button type="button"
+                        ng-click="addRoom()"
+                        ng-disabled="!selectedRoom"
+                        class="btn btn-primary pull-left add-room-btn">
+                    +
+                </button>
+            </span>
+        </div>
+        <div class="clearfix"></div>
+        <select name="room"
+               ng-model="currentRoom"
+               ng-options="room as room.name
+                           for room in selectedRooms"
+               size="6"
+               class="form-control rooms"
+               ng-keydown="onRoomsKeyDown($event)"
+               required
+        ></select>
     </div>
     <div class="clearfix"></div>
-    <div>
-        <label for="room">Room:</label>
-        <input type="text"
-               name="room"
-               ng-model="reservation.room"
-               placeholder="Room"
-               required
-               class="form-control"></input>
-    </div>
     <div class="form-group">
         <label for="discount">Discount:</label>
         <input type="number"
@@ -55,16 +79,9 @@
         <input type="number"
                name="roomCost"
                ng-model="reservation.roomCost"
-               class="form-control"></input>
+               class="form-control"
+               required></input>
     </div>
-    <div class="form-group">
-        <label for="bill_id">Bill:</label>
-        <select name="bill_id"
-               ng-model="selectedBill"
-               ng-options="bill.billId for bill in bills"
-               required
-               class="form-control"></select>
-    </div> 
     <input type="submit" class="btn btn-primary"></input>
 
 </form>

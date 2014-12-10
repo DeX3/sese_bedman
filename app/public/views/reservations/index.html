@@ -3,7 +3,7 @@
 <li ng-show="reservations.length" ng-repeat="reservation in reservations">
     <ul>
         <a href="#/reservations/{{reservation.id}}">
-            {{reservation.customer}} {{reservation.room}}
+            {{reservation.id}}
         </a>
     </ul>
 </li>
@@ -13,7 +13,3 @@
 </p>
 
 <a href="#/reservations/create">Create a new reservation</a>
-
-<pre class="debug">
-    {{ reservations | json }}
-</pre>

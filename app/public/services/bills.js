@@ -3,11 +3,8 @@
 var app = angular.module( "bedman" );
 
 app.factory( "Bill", function( $Model ) {
-
-    return $Model.extend(
-        {
-            name: "Bill",
-            url: "/api/bills",
-        }
-    );
+    return $Model.extend( {
+        url: "/api/bills",
+        dates: ["date"]
+    } );
 } );

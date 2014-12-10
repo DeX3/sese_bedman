@@ -12,5 +12,8 @@ module.exports = bookshelf.model( "Room", {
     tableName: "rooms",
     validate: function() {
         return validator.run( this.attributes );
-    }
+    },
+	reservations: function(){
+		return this.belongsToMany("Reservations");
+	}
 } );

@@ -1,20 +1,15 @@
-<h1>room list</h1>
+<h1>Room list</h1>
 
 <li ng-show="rooms.length" ng-repeat="room in rooms">
     <ul>
         <a href="#/rooms/{{room.id}}">
-            {{room.name}} {{room.maxCap}}
+            {{room.name}}
         </a>
     </ul>
 </li>
 
 <p ng-hide="rooms.length">
-
-    {{rooms.length}} rooms available!
+    No rooms available (yet)!
 </p>
 
 <a href="#/rooms/create">Create a new room</a>
-
-<pre class="debug">
-    {{ rooms | json }}
-</pre>

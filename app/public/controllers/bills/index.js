@@ -6,5 +6,7 @@ app.controller( "BillsListCtrl",
                 function( $scope,
                           Bill ) {
 
-    $scope.bills = Bill.query();
+    Bill.$query().then( function(bills) {
+        $scope.bills = bills;
+    } );
 } );
