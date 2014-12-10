@@ -26,3 +26,34 @@ if(!Function.prototype.bind) {
     return fBound;
   };
 }
+
+window.testutils = {
+    MockFactory: function() {
+
+        var dialogs = {
+        };
+
+        this.mockedDialogs = {
+
+            confirm: chai.spy( function() {
+
+                return {
+                    then: function( succ, err ) {
+                        dialogs.confirm = {
+                            succ: succ || function(){},
+                            err: err || function(){}
+                        };
+                    }
+                };
+            } ),
+
+            confirmOk: function() {
+                dialogs.confirm.succ();
+            },
+
+            confirmCancel: function() {
+                dialogs.confirm.err();
+            }
+        };
+    },
+};

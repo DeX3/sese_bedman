@@ -25,7 +25,9 @@ describe( "Reservation API", function() {
         //delete all Reservations in the database
         
         // first, delete all customer <-> reservation relations
-        bookshelf.knex( "customers_reservation" ).del().then( [
+        bookshelf.knex( "customers_reservation" ).del()
+		.then(bookshelf.knex("room_reservation").del())
+		.then( [
             // now all customers and reservations can then be deleted
             Customer.query().del(),
             Reservation.query().del()
@@ -62,7 +64,6 @@ describe( "Reservation API", function() {
     var tester = new utils.PresenceTester( "/api/reservations",
                                            testData.reservations.a );
 
-    tester.require( "room" );
     tester.require( "roomCost" );
 
     it( "should perform validations on updates as well", function( done ) {

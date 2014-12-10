@@ -38,12 +38,10 @@ module.exports = {
     },
     reservations: {
         a: {
-            room: "HS 14",
             discount: 0,
             roomCost: 45
         },
         b: {
-            room: "366",
             discount: 33,
             roomCost: 49.90
         }

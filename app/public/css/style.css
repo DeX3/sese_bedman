@@ -6,13 +6,43 @@ form.customer-form {
     width: 50%;
 }
 
-form.reservation-form select.customers {
+form.reservation-form select.customers,
+form.reservation-form select.rooms {
     width: 200px;
 }
 
-form.reservation-form button.add-customer-btn {
+form.reservation-form select.customer-selector,
+form.reservation-form select.rooms-selector {
+    width: 166px;
+    margin-top: 0;
+    height: 26px;
+    margin-right: 1px;
+}
+
+form.reservation-form select.rooms-selector {
+    padding-top: 3px;
+}
+
+form.reservation-form button.add-customer-btn,
+form.reservation-form button.add-room-btn {
     height: 26px;
     line-height: 13px;
+}
+
+form.reservation-form div.customer-group,
+form.reservation-form div.room-group {
+    width: 150px;
+    float: left;
+    margin-right: 100px;
+}
+
+form.reservation-form div.customer-group button,
+form.reservation-form div.room-group button {
+    margin-right: 10px;
+}
+
+form.resrvation-form div.angucomplete-holder input {
+    width: 166px;
 }
 
 form.reservation-form select {
@@ -22,3 +52,4 @@ form.reservation-form select {
 button.delete-btn {
     margin-top: 10px;
 }
+

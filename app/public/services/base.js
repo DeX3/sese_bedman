@@ -2,7 +2,7 @@
 
 var app = angular.module( "bedman" );
 
-app.factory( "$Model", function( $http ) {
+app.factory( "$Model", function( $http, DateService ) {
 
     var Model = function() {
 
@@ -32,15 +32,29 @@ app.factory( "$Model", function( $http ) {
 
             var self = this;
 
+            var data = angular.copy( self );
+        
+            angular.forEach( this.$dates, function(name) {
+                if( name in data && typeof data[name] === "object" ) {
+                    data[name] = DateService.formatDate( data[name] );
+                }
+            } );
+
             return $http( {
                 method: method,
                 url: url,
-                data: this
+                data: data
             } ).then( Model.$unpackResponse ).then( function( data ) {
 
                 if( self.$isNew ) {
                     self.$setNew( false );
                 }
+
+                angular.forEach( self.$dates, function(name) {
+                    if( name in data ) {
+                        data[name] = DateService.parseDate( data[name] );
+                    }
+                } );
 
                 angular.copy( data, self );
                 
@@ -86,6 +100,12 @@ app.factory( "$Model", function( $http ) {
         var m = new this();
         angular.copy( data, m );
         m.$setNew( false );
+
+        angular.forEach( this.prototype.$dates, function(name) {
+            if( name in m ) {
+                m[name] = DateService.parseDate( m[name] );
+            }
+        } );
 
         return m;
     };
@@ -172,6 +192,13 @@ app.factory( "$Model", function( $http ) {
             configurable: false,
             enumerable: false,
             value: options.url
+        } );
+
+        Object.defineProperty( NewModel.prototype, "$dates", {
+            writable: false,
+            configurable: false,
+            enumerable: false,
+            value: options.dates
         } );
 
         angular.extend( NewModel.prototype, instanceMethods );

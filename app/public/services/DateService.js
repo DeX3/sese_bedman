@@ -24,6 +24,10 @@ app.factory( "DateService", function() {
 
         formatDate: function( dateobj ) {
             
+            if( !dateobj ) {
+                return null;
+            }
+            
             return dateobj.getFullYear() + "-" +
                    (dateobj.getMonth() + 1) + "-" +
                    dateobj.getDate();

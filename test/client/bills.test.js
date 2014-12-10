@@ -2,7 +2,7 @@
 
 /* jshint expr: true */
 
-describe( "Customer controllers", function() {
+describe( "Bills controllers", function() {
 
     beforeEach( module("bedman") );
 
@@ -11,19 +11,19 @@ describe( "Customer controllers", function() {
         $httpBackend.verifyNoOutstandingRequest();
     } ) );
 
-    describe( "CustomerListCtrl", function() {
+    describe( "BillsListCtrl", function() {
         it( "should exist",
             inject( function( $controller,
                               $rootScope,
                               $httpBackend,
-                              Customer ) {
+                              Bill ) {
 
-            $httpBackend.when( "GET", "/api/customers" )
+            $httpBackend.when( "GET", "/api/bills" )
                         .respond( [] );
 
-            var ctrl = $controller( "CustomerListCtrl", {
+            var ctrl = $controller( "BillsListCtrl", {
                 $scope: $rootScope.$new(),
-                Customer: Customer
+                Bill: Bill
             } );
 
             $httpBackend.flush();
@@ -31,108 +31,107 @@ describe( "Customer controllers", function() {
             chai.expect( ctrl ).to.exist;
         } ) );
 
-        it( "should provide a customers array",
-            inject( function( $controller,
-                              $rootScope,
-                              $httpBackend,
-                              Customer ) {
-
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [] );
-
-            var scope = $rootScope.$new();
-            $controller( "CustomerListCtrl", {
-                $scope: scope,
-                Customer: Customer
-            } );
-
-            $httpBackend.flush();
-
-            chai.expect( scope.customers ).to.exist;
-            chai.expect( scope.customers ).to.be.empty;
-        } ) );
     } );
 
-    describe( "CustomerEditCtrl", function() {
+    describe( "BillsEditCtrl", function() {
 
         it( "should exist",
             inject( function( $controller,
                               $rootScope,
                               $location,
                               $httpBackend,
-                              Customer ) {
+                              Bill ) {
 
-            var ctrl = $controller( "CustomerEditCtrl", {
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
+
+            var ctrl = $controller( "BillsEditCtrl", {
                 $scope: $rootScope.$new(),
                 $routeParams: { id: "create" },
                 $location: $location,
-                Customer: Customer
+                Bill: Bill
             } );
+
+            $httpBackend.flush();
+
             chai.expect( ctrl ).to.exist;
         } ) );
 
-        it( "should create a new customer",
+        it( "should create a new bill",
             inject( function( $controller,
                               $rootScope,
                               $location,
                               $httpBackend,
-                              Customer ) {
+                              Bill ) {
+
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
 
             var scope = $rootScope.$new();
 
-            $controller( "CustomerEditCtrl", {
+            $controller( "BillsEditCtrl", {
                 $scope: scope,
                 $routeParams: { id: "create" },
                 $location: $location,
-                Customer: Customer
+                Bill: Bill
             } );
 
-            chai.expect( scope.customer ).to.exist;
+            $httpBackend.flush();
+
+            chai.expect( scope.bill ).to.exist;
         } ) );
 
-        it( "should provide an existing customer",
+        it( "should provide an existing bill",
             inject( function( $controller,
                               $rootScope,
                               $location,
                               $httpBackend,
-                              Customer ) {
+                              Bill ) {
 
-            $httpBackend.when( "GET", "/api/customers/4711" )
+
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
+            $httpBackend.when( "GET", "/api/bills/4711" )
                         .respond( { id: 4711 } );
 
             var scope = $rootScope.$new();
-            $controller( "CustomerEditCtrl", {
+            $controller( "BillsEditCtrl", {
                 $scope: scope,
                 $routeParams: { id: 4711 },
                 $location: $location,
-                Customer: Customer
+                Bill: Bill
             } );
 
             $httpBackend.flush();
 
-            chai.expect( scope.customer ).to.exist;
-            chai.expect( scope.customer.id ).to.equal( 4711 );
+            chai.expect( scope.bill ).to.exist;
+            chai.expect( scope.bill.id ).to.equal( 4711 );
 
         } ) );
 
-        it( "should provide a save method to save a customer",
+        it( "should provide a save method to save a bill",
             inject( function( $controller,
                               $rootScope,
                               $location,
                               $httpBackend,
-                              Customer ) {
+                              Bill ) {
+
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
+            $httpBackend.when( "POST", "/api/bills" )
+                        .respond( { id: 4711, 
+                                    customer: {} } );
 
             var scope = $rootScope.$new();
 
-            $controller( "CustomerEditCtrl", {
+            $controller( "BillsEditCtrl", {
                 $scope: scope,
                 $routeParams: { id: "create" },
                 $location: $location,
-                Customer: Customer
+                Bill: Bill
             } );
 
-            $httpBackend.when( "POST", "/api/customers" )
-                        .respond( { id: 4711 } );
+            $httpBackend.flush();
 
             scope.save();
 
@@ -144,24 +143,27 @@ describe( "Customer controllers", function() {
                               $rootScope,
                               $location,
                               $httpBackend,
-                              Customer ) {
+                              Bill ) {
 
-            $httpBackend.when( "GET", "/api/customers/4711" )
+            $httpBackend.when( "GET", "/api/customers" )
+                        .respond( [] );
+
+            $httpBackend.when( "GET", "/api/bills/4711" )
                         .respond( { id: 4711 } );
 
-            $httpBackend.when( "DELETE", "/api/customers/4711" )
+            $httpBackend.when( "DELETE", "/api/bills/4711" )
                         .respond( {} );
 
             var scope = $rootScope.$new();
             var mockFactory = new testutils.MockFactory();
             var dialogs = mockFactory.mockedDialogs;
 
-            $controller( "CustomerEditCtrl", {
+            $controller( "BillsEditCtrl", {
                 $scope: scope,
                 $routeParams: { id: 4711 },
                 $location: $location,
                 dialogs: dialogs,
-                Customer: Customer
+                Bill: Bill
             } );
 
 

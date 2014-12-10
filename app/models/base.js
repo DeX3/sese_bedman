@@ -30,6 +30,22 @@ bookshelf.plugin( "registry" );
 var schema = {};
 var schemaPromises = [];
 
+
+/**
+ * Called on saving for each date(time)-attribute. This will convert
+ * attributes that are strings, but declared as date(time) according to the
+ * schema to dates.
+ *
+ * @memberof Model#
+ * @private
+ */
+function fixDateTimeIn( object, name ) {
+    if( name in object &&
+        typeof object[name] === "string" ) {
+        object[name] = new Date( object[name] );
+    }
+}
+
 /**
  * Replaces bookshelf's base model with our own base model.
  * @class Model
@@ -47,11 +63,11 @@ bookshelf.Model = bookshelf.Model.extend( {
     initialize: function() {
 
         var self = this;
-        //makes sure that only whitelisted attributes can be updated
-        this.on( "saving", this.filterAttributes.bind(this) );
 
-        //makes sure that this.validate is called on save
-        this.on( "saving", this.validate.bind(this) );
+        self.dateTimes = [];
+
+        //register saving callback
+        this.on( "saving", this.saving.bind(this) );
 
         //by default, all columns (except the timestamp columns) are writable
         //this array is filled later on
@@ -66,7 +82,7 @@ bookshelf.Model = bookshelf.Model.extend( {
 
             // add fixer functions for date(time) columns
             if( columnInfo.type === "datetime" ) {
-                self.on( "saving", self.fixDateTimeIn.bind(self, name) );
+                self.dateTimes.push( name );
             } else if( columnInfo.type === "date" ) {
                 self.on( "fetched", self.fixDateOut.bind(self, name) );
             }
@@ -90,35 +106,45 @@ bookshelf.Model = bookshelf.Model.extend( {
      * @memberof Model#
      * @private
      */
-    filterAttributes: function( model, attrs, options ) {
+    saving: function( model, attrs, options ) {
 
-        this.attributes = this.pick( this.writableAttributes );
+        var self = this;
+
+        //if patch is true, attrs is used instead of this.attributes
+        if( options.patch ) {
+            var toRemove = [];
+            for( var attr in attrs ) {
+                if( attrs.hasOwnProperty(attr) ) {
+                    if( this.writableAttributes.indexOf(attr) < 0 ) {
+                        toRemove.push( attr );
+                    }
+                }
+            }
+
+            toRemove.forEach( function(attr) {
+                delete attrs[attr];
+            } );
+        } else {
+            this.attributes = this.pick( this.writableAttributes );
+        }
+
+        this.dateTimes.forEach( function(column) {
+            fixDateTimeIn( self.attributes, column );
+            fixDateTimeIn( attrs, column );
+        } );
 
         if( this.writableAttributes.indexOf("updated_at") < 0 ) {
-            this.attributes.updated_at = new Date();
+            attrs.updated_at = this.attributes.updated_at = new Date();
         }
 
         if( !this.attributes.created_at ) {
-            this.attributes.created_at = this.attributes.updated_at;
+            attrs.created_at = this.attributes.created_at = attrs.updated_at;
+        }
+
+        if( this.validate ) {
+            return this.validate( model, attrs, options );
         }
     },
-
-    /**
-     * Called on saving for each date(time)-attribute. This will convert
-     * attributes that are strings, but declared as date(time) according to the
-     * schema to dates.
-     *
-     * @memberof Model#
-     * @private
-     */
-    fixDateTimeIn: function( name, model, attrs ) {
-
-        if( name in this.attributes &&
-            typeof this.attributes[name] === "string" ) {
-            this.attributes[name] = new Date( this.attributes[name] );
-        }
-    },
-
     /**
      * This will convert date-columns (they come as a javascript date object,
      * that includes time...) to a string of the format `YYYY-M-D` for each
@@ -169,3 +195,4 @@ module.exports = bookshelf;
 module.exports.onSchemaLoaded = function( callback ) {
     BPromise.all( schemaPromises ).then( callback );
 };
+

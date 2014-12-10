@@ -2,9 +2,9 @@
 var Checkit = require( "checkit" );
 var bookshelf = require( "./base" );
 require( "./Customer" );
+require( "./Room" );
 
 var validator = new Checkit( {
-    room:       "required",
     discount:   ["greaterThanEqualTo:0", "lessThanEqualTo:100"],
     roomCost:   "required"
 } );
@@ -14,7 +14,11 @@ module.exports = bookshelf.model( "Reservation", {
     customers: function() {
         return this.belongsToMany( "Customer" );
     },
-    validate: function() {
+	rooms: function(){
+		return this.belongsToMany("Room");
+	},
+    validate: function( model, attrs, options ) {
+        
         return validator.run( this.attributes );
     }
 } );
