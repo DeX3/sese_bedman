@@ -8,6 +8,7 @@ app.controller( "ReservationEditCtrl",
                           Reservation,
                           dialogs,
                           Customer,
+                          ValidationErrorHandler,
                           Room) {
 
     $scope.selectedCustomers = [];
@@ -132,6 +133,77 @@ app.controller( "ReservationEditCtrl",
                              "selectedRooms" );
     };
 
+    $scope.$watch( "currentRoom", function() {
+        if( $scope.currentRoom ) {
+            var room = $scope.currentRoom;
+            $scope.configurations = room.getAvailableConfigurations();
+        }
+    } );
+
+
+    var projectBill = function() {
+
+        if( !$scope.reservation ||
+            !$scope.reservation.to ||
+            !$scope.reservation.from ||
+            $scope.reservation.to < $scope.reservation.from ||
+            $scope.selectedCustomers.length === 0 ) {
+            
+            $scope.projectedBill = null;
+            return;
+        }
+
+        var bestDiscountCustomer = $scope.selectedCustomers.reduce(
+            function(current, customer) {
+
+            if( !current || customer.discount > current.discount ) {
+                return customer;
+            } else {
+                return current;
+            }
+
+        }, null );
+
+        var discount = bestDiscountCustomer?
+                        bestDiscountCustomer.discount :
+                        0;
+
+        var duration = ($scope.reservation.to - $scope.reservation.from) /
+                        (1000 * 60 * 60 * 24) +
+                         1;
+
+        $scope.projectedBill = {};
+        $scope.projectedBill.duration = duration;
+
+        $scope.projectedBill.rooms = [];
+        var sum = $scope.selectedRooms.reduce( function( sum, room ) {
+
+            var dailyRate = room.getDailyCosts();
+            $scope.projectedBill.rooms.push( {
+                name: room.name,
+                configuration: room.configuration,
+                dailyRate: dailyRate,
+                total: room.getDailyCosts() * duration
+            } );
+
+            return sum + room.getDailyCosts() * duration;
+        }, 0 );
+
+        $scope.projectedBill.subtotal = sum;
+        $scope.projectedBill.discount = { 
+                                          percent: discount,
+                                          amount: sum * (discount/100),
+                                          via: bestDiscountCustomer };
+        $scope.projectedBill.total = sum * (1 - discount/100);
+    };
+
+    $scope.$watchGroup( [ "currentRoom.configuration",
+                          "reservation.from",
+                          "reservation.to"], projectBill );
+
+    $scope.$watchCollection( "selectedCustomers", projectBill );
+    $scope.$watchCollection( "selectedRooms", projectBill );
+
     $scope.save = function() {
         $scope.reservation.customers = [];
         $scope.reservation.rooms = [];
@@ -139,11 +211,18 @@ app.controller( "ReservationEditCtrl",
             $scope.reservation.customers.push( customer.id );
         } );
         angular.forEach( $scope.selectedRooms, function( room ) {
-            $scope.reservation.rooms.push( room.id );
+            $scope.reservation.rooms.push( {
+                id: room.id,
+                configuration: room.configuration
+            } );
         } );
-        $scope.reservation.$save().then( function( reservation ) {
-            $location.path( "/reservations" );
-        } );
+
+
+        ValidationErrorHandler.handle( 
+            $scope.form,
+            $scope.reservation.$save().then( function( reservation ) {
+                $location.path( "/reservations" );
+        } ) );
     };
 
     $scope.destroy = function() {

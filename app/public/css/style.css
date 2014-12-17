@@ -31,9 +31,8 @@ form.reservation-form button.add-room-btn {
 
 form.reservation-form div.customer-group,
 form.reservation-form div.room-group {
-    width: 150px;
+    width: 211px;
     float: left;
-    margin-right: 100px;
 }
 
 form.reservation-form div.customer-group button,
@@ -41,12 +40,48 @@ form.reservation-form div.room-group button {
     margin-right: 10px;
 }
 
-form.resrvation-form div.angucomplete-holder input {
+form.reservation-form div.angucomplete-holder input {
     width: 166px;
+}
+
+form.reservation-form div.configuration-group {
+    padding-top: 59px;
+}
+
+form.reservation-form div.configuration-group label {
+    margin-bottom: 0;
+}
+
+form.reservation-form div.configuration-group select {
 }
 
 form.reservation-form select {
     margin-top: 10px;
+}
+
+form.reservation-form div.from-group,
+form.reservation-form div.to-group {
+    margin-top: 30px;
+    width: 160px;
+    float: left;
+    margin-right: 20px;
+}
+
+form.reservation-form div.projected-bill table {
+    width: 340px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+}
+
+form.reservation-form div.projected-bill table .right {
+    text-align: right;
+}
+
+form.room-form div.pricing div.single>div,
+form.room-form div.pricing div.double>div,
+form.room-form div.pricing div.triple>div {
+    float: left;
+    margin-left: 20px;
 }
 
 button.delete-btn {

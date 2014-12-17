@@ -2,5 +2,6 @@ angular.module( "bedman", [
     "ngRoute",
     "ngResource",
     "ui.bootstrap",
-    "angucomplete-alt"
+    "angucomplete-alt",
+    "ng-currency"
 ] );

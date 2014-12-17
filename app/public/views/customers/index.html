@@ -1,12 +1,12 @@
 <h1>Customer list</h1>
 
-<li ng-show="customers.length" ng-repeat="customer in customers">
-    <ul>
+<ul ng-show="customers.length" ng-repeat="customer in customers">
+    <li>
         <a href="#/customers/{{customer.id}}">
             {{customer.fullName()}}
         </a>
-    </ul>
-</li>
+    </li>
+</ul>
 
 <p ng-hide="customers.length">
     No customers available!

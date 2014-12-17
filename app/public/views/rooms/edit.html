@@ -16,16 +16,87 @@
         <input type="number"
                name="maxCap"
                ng-model="room.maxCap"
-               placeholder="0"
+               placeholder="Maximum capacity"
+               min="1"
+               max="3"
                required
                class="form-control"></input>
     </div>
-    <div class="form-group">
-        <label for="priceSingle">Price (Single):</label>
-        <input type="number"
-               name="priceSingle"
-               ng-model="room.priceSingle"
-               class="form-control"></input>
+    <div class="pricing">
+        <label for="pricing">Pricing (daily rate)</label>
+        <div class="single">
+            <div class="form-group">
+                <label for="priceSingle">Single:</label>
+                <input type="text"
+                       ng-currency
+                       name="priceSingle"
+                       ng-model="room.priceSingle"
+                       required
+                       class="form-control"></input>
+            </div>
+            <div class="form-group"
+                 ng-if="room.isConfigurationAvailable('SINGLE1CHILD')">
+                <label for="priceSingleOneChild">Single + a child:</label>
+                <input type="text"
+                       ng-currency
+                       name="priceSingleChild"
+                       ng-model="room.priceSingleChild"
+                       required
+                       class="form-control"></input>
+            </div>
+            <div class="form-group"
+                 ng-if="room.isConfigurationAvailable('SINGLE2CHILDREN')">
+                <label for="priceSingleTwoChildren">Single + 2 children:</label>
+                <input type="text"
+                       ng-currency
+                       name="priceSingleTwoChildren"
+                       ng-model="room.priceSingleTwoChildren"
+                       required
+                       class="form-control"></input>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="double">
+            <div class="form-group"
+                 ng-if="room.isConfigurationAvailable('DOUBLE')">
+                <label for="priceDouble">Double:</label>
+                <input type="text"
+                       ng-currency
+                       name="priceDouble"
+                       ng-model="room.priceDouble"
+                       required
+                       class="form-control"></input>
+            </div>
+            <div class="form-group"
+                 ng-if="room.isConfigurationAvailable('DOUBLE1CHILD')">
+                <label for="priceDoubleChild">Double + a child:</label>
+                <input type="text"
+                       ng-currency
+                       name="priceDoubleChild"
+                       ng-model="room.priceDoubleChild"
+                       required
+                       class="form-control"></input>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="triple">
+            <div class="form-group"
+                 ng-if="room.isConfigurationAvailable('TRIPLE')">
+                <label for="priceTriple">Triple:</label>
+                <input type="text"
+                       ng-currency
+                       name="priceTriple"
+                       ng-model="room.priceTriple"
+                       required
+                       class="form-control"></input>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
     </div>
     <input type="submit" class="btn btn-primary"></input>
 
