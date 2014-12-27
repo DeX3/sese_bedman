@@ -52,6 +52,10 @@
     </script>
     <script
         type="text/javascript"
+        src="public/bower_components/ng-currency/dist/ng-currency.min.js">
+    </script>
+    <script
+        type="text/javascript"
         src="public/app.js">
     </script>
     <script
@@ -85,6 +89,13 @@
         <script
             type="text/javascript"
             src="public/filters/<%= ngFilters %>"></script>
+    <% } ); %>
+
+    <!-- utils -->
+    <% utils.forEach( function( util ) { %>
+        <script
+            type="text/javascript"
+            src="public/utils/<%= util %>"></script>
     <% } ); %>
 
 </head>

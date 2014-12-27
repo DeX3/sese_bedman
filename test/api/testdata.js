@@ -38,12 +38,12 @@ module.exports = {
     },
     reservations: {
         a: {
-            discount: 0,
-            roomCost: 45
+            from: "2014-10-10",
+            to: "2014-10-10"
         },
         b: {
-            discount: 33,
-            roomCost: 49.90
+            from: "2014-10-10",
+            to: "2014-10-11"
         }
     }
 };

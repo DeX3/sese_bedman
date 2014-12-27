@@ -2,7 +2,7 @@
 
 var app = angular.module( "bedman" );
 
-app.factory( "$Model", function( $http, DateService ) {
+app.factory( "$Model", function( $http, DateService, ValidationError ) {
 
     var Model = function() {
 
@@ -44,7 +44,9 @@ app.factory( "$Model", function( $http, DateService ) {
                 method: method,
                 url: url,
                 data: data
-            } ).then( Model.$unpackResponse ).then( function( data ) {
+            } ).then( Model.$unpackResponse,
+                      Model.$unpackResponse
+            ).then( function( data ) {
 
                 if( self.$isNew ) {
                     self.$setNew( false );
@@ -86,10 +88,11 @@ app.factory( "$Model", function( $http, DateService ) {
 
     Model.$unpackResponse = function( response ) {
         var data = response.data;
-        if( (response.status < 200 ||
-             response.status > 299 ||
-             response.status !== 304) &&
-            data ) {
+        if( response.status === 400 ) {
+            throw new ValidationError(response.data);
+        } else if( (response.status >= 200 &&
+             response.status < 300) ||
+             response.status === 304) {
             return data;
         } else { 
             throw new Error( response );
@@ -178,6 +181,10 @@ app.factory( "$Model", function( $http, DateService ) {
 
         var NewModel = function( attributes ) {
             angular.extend( this, attributes );
+
+            if( this.initialize ) {
+                this.initialize();
+            }
         };
 
         angular.extend( NewModel, Model );

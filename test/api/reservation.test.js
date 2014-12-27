@@ -35,7 +35,7 @@ describe( "Reservation API", function() {
     } );
 
     it( "should save a valid reservation", function( done ) {
-        
+       
         var r = testData.reservations.a;
 
         request( testsetup.appUrl )
@@ -64,7 +64,8 @@ describe( "Reservation API", function() {
     var tester = new utils.PresenceTester( "/api/reservations",
                                            testData.reservations.a );
 
-    tester.require( "roomCost" );
+    tester.require( "from" );
+    tester.require( "to" );
 
     it( "should perform validations on updates as well", function( done ) {
         

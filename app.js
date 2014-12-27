@@ -67,6 +67,7 @@ app.locals.ngDirectives = filesIn( "app/public/directives", ".js" );
 app.locals.ngViews = filesIn( "app/public/views", ".html" );
 app.locals.ngDirectives = filesIn( "app/public/directives", ".js" );
 app.locals.ngFilters = filesIn( "app/public/filters", ".js" );
+app.locals.utils = filesIn( "app/public/utils", ".js" );
 
 routes.setup( app );
 

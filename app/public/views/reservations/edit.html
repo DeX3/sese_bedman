@@ -1,6 +1,6 @@
 <h1>Edit reservation</h1>
 
-<form ng-submit="save()" class="reservation-form">
+<form name="form" ng-submit="save()" class="reservation-form">
     <div class="customer-group">
         <label for="customers">Customers:</label></br>
         <div class="input-group">
@@ -42,7 +42,9 @@
                    ng-model="selectedRoom"
                    placeholder="Select room..."
                    required
-                   ng-options="room as room.name for room in availableRooms"
+                   ng-options="room as (room.name + 
+                                        ' (max. ' + room.maxCap + ')')
+                               for room in availableRooms"
                    class="form-control rooms-selector"
                    ></select>
             <span class="input-group-btn">
@@ -65,23 +67,85 @@
                required
         ></select>
     </div>
+    <div class="configuration-group" ng-if="currentRoom">
+        <div class="input-group">
+            <label for="configuration">
+                Room {{currentRoom.name}} configuration:
+            </label>
+            <select name="configuration"
+                ng-model="currentRoom.configuration"
+                placeholder="Select room configuration..."
+                required
+                ng-options="config.value as config.name
+                            for config in configurations"
+                class="form-control configuration-selector" name=""></select>
+        </div>
+    </div>
     <div class="clearfix"></div>
-    <div class="form-group">
-        <label for="discount">Discount:</label>
-        <input type="number"
-               name="discount"
-               ng-model="reservation.discount"
-               placeholder="0"
-               class="form-control"></input>
+    <div class="from-group">
+        <div class="form-group">
+            <label for="from">From:</label>
+            <input type="date"
+                   name="from"
+                   ng-model="reservation.from"
+                   ng-model-options="{ timezone: 'UTC' }"
+                   class="form-control"></input>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="roomCost">RoomCost:</label>
-        <input type="number"
-               name="roomCost"
-               ng-model="reservation.roomCost"
-               class="form-control"
-               required></input>
+    <div class="to-group">
+        <div class="form-group" shows-validation="form.to">
+            <label for="from">To:</label>
+            <input type="date"
+                   name="to"
+                   ng-model="reservation.to"
+                   ng-model-options="{ timezone: 'UTC' }"
+                   class="form-control"></input>
+        </div>
     </div>
+    <div class="clearfix"></div>
+
+    <div class="projected-bill">
+        <label for="projected-bill">Projected bill</label>
+        <table ng-if="projectedBill">
+            <tr>
+                <th colspan="3">Rooms</th>
+            </tr>
+            <tr ng-repeat="room in projectedBill.rooms">
+                <td>{{room.name}} ({{room.configuration}})</td>
+                <td>
+                    {{room.dailyRate | currency}} &times;
+                    {{projectedBill.duration}} days
+                </td>
+                <td class="right">
+                    {{room.total | currency}}
+                </td>
+            </tr>
+            <tr>
+                <th>Subtotal</th>
+                <td></td>
+                <td class="right">{{projectedBill.subtotal | currency}}</td>
+            </tr>
+            <tr>
+                <th>Discount</th>
+                <td>
+                    {{projectedBill.discount.percent}}%
+                    (via {{projectedBill.discount.via.fullName()}})
+                </td>
+                <td class="right">
+                    -{{projectedBill.discount.amount | currency}}
+                </td>
+            </tr>
+            <tr>
+                <th>Projected total</th>
+                <td></td>
+                <th class="right">{{projectedBill.total | currency}}</th>
+            </tr>
+        </table>
+        <p ng-if="!projectedBill">
+            Projected bill not (yet) available!
+        </p>
+    </div>
+
     <input type="submit" class="btn btn-primary"></input>
 
 </form>

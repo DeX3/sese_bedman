@@ -22,6 +22,9 @@ var config = require( "config" );
 var knex = require( "knex" )( config.get( "db" ) );
 var bookshelf = require( "bookshelf" )( knex );
 var BPromise = require( "bluebird" );
+var pad = require( "pad" );
+var _ = require( "underscore" );
+_.mixin( require("underscore.inflections") );
 require( "sugar" );
 
 bookshelf.plugin( "registry" );
@@ -98,6 +101,7 @@ bookshelf.Model = bookshelf.Model.extend( {
         } );
     },
 
+
     /**
      * Called on saving. Removes non-writable attributes from the model, before
      * they reach the database. As this typically removes timestamps as well,
@@ -157,11 +161,144 @@ bookshelf.Model = bookshelf.Model.extend( {
 
         if( model.attributes[name] ) {
             var date = model.attributes[name];
-            model.attributes[name] = date.getFullYear() + "-" +
-                                      (date.getMonth() + 1) + "-" +
-                                      date.getDate();
+
+            model.attributes[name] = pad( 4, date.getFullYear() + "", "0" ) + 
+                               "-" + pad( 2, (date.getMonth() + 1) + "", "0") +
+                               "-" + pad( 2, date.getDate() + "", "0" );
         }
-    }
+    },
+
+    
+    /**
+     * Updates a models relation defined via hasMany or belongsToMany.
+     *
+     * @example
+     *  reservation.updateRelation( "rooms",
+     *                              [ { id: 1, configuration: "SINGLE" } ],
+     *                              { pivots: [ "configuration" ] }
+     *                            )
+     *
+     * The `options`-parameter supports the following keys:
+     *  * `pivots`: An array of strings each being a pivot-data column in the
+     *              joining table. Each of these keys will be plucked from each
+     *              element in data and updated in the joining table via
+     *              `updatePivot` (or added there).
+     *  * `columnName`: This specifies the name of the id-column in the joining
+     *                  table that holds the foreign key. If not specified, this
+     *                  is inferred by singularizing `relationName` and adding
+     *                  an "_id" suffix.
+     *  * `transacting`: Use this transaction for all underlying bookshelf
+     *                   operations.
+     *
+     * @param relationName The relation to update as given by `hasMany` or
+     *                     `belongsToMany`
+     * @param data An array of models and/or IDs.
+     * @param options Additional options, supported options are: `pivots`,
+     *                `columnName` and `tx`.
+     */
+    updateRelation: function( relationName,
+                              data,
+                              options ) {
+
+        if( typeof data  === "undefined" ) {
+            return this;
+        }
+
+        var self = this;
+
+        //default the column name to some sane value
+        if( !options.columnName ) {
+            options.columnName = _.singularize( relationName ) + "_id";
+        }
+
+        //default pivots to none
+        options.pivots = options.pivots || [];
+
+        // data may have models and IDs, save all IDs to ids
+        var ids = data.map( function( elem ) {
+            if( elem.id ) {
+                return elem.id;
+            } else {
+                return elem;
+            }
+        } );
+
+        var toRemove = [];
+        var toAdd = [];
+        var toUpdate = {};
+
+        return this.related(    //
+            relationName        // first, fetch all existing relations
+        ).fetch(                //
+            { transacting: options.transacting }
+        ).then( function( fetched ) {
+            
+            // only ids needed here
+            fetched = fetched.map( function( elem ) { return elem.id; } );
+            
+            // add missing elements in update-data to toRemove list
+            fetched.forEach( function( id ) {
+                if( ids.indexOf(id) < 0 ) {
+                    toRemove.push( id );
+                }
+            } ); 
+
+            ids.forEach( function( id, i ) {
+                if( fetched.indexOf(id) < 0 ) {
+                    // add additional elements in update-data to toAdd list
+                    var add = {};
+                    add[options.columnName] = id;
+                    options.pivots.forEach( function(pivot) {
+                        add[pivot] = data[i][pivot];
+                    } );
+                    toAdd.push( add );
+                } else if( typeof data[i] === "object" ) {
+                    //if a relation is specified, that already exists, make sure
+                    //to update its pivots
+                    toUpdate[id] = {};
+                    options.pivots.forEach( function(pivot) {
+                        toUpdate[id][pivot] = data[i][pivot];
+                    } );
+                }
+            } );
+
+            console.dir( toUpdate );
+
+            // now, update all needed pivots
+            var promises = [];
+            _.each( toUpdate, function( pivots, id ) {
+                var opts = { query: { where: {} } };
+                opts.query.where[options.columnName] = id;
+                opts.transacting = options.transacting;
+                console.log( "updating pivot" );
+                console.dir( pivots );
+                console.dir( opts.query );
+                var promise = self[relationName]().updatePivot(
+                    pivots,
+                    opts
+                ).then( function() {
+                    console.log( "pivot updated" );
+                } );
+
+                promises.push( promise );
+            } );
+
+            var opts = { transacting: options.transacting };
+
+            console.dir( toRemove );
+
+            // remove old relations and add new ones
+            promises.push( self[relationName]().detach(toRemove, opts) );
+            promises.push( self[relationName]().attach(toAdd, opts) );
+
+            // return a promise resolving to the original object when all
+            // updates have completed
+            return BPromise.all( promises ).then( function() {
+                return self;
+            } );
+        } );
+
+    },
 
 } );
 
