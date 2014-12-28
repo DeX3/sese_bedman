@@ -85,6 +85,9 @@ module.exports = function( grunt ) {
                             password: db.connection.password,
                             database: db.connection.database
                         }
+                    },
+                    pool: {
+                        max: 1
                     }
                 };
                 
@@ -143,6 +146,7 @@ module.exports = function( grunt ) {
                       "app/**/*.js",
                       "test/**/*.js",
                       "!app/public/bower_components/**/*",
+                      "!test/reports/**/*",
                       "README.md"],
                 options: {
                     destination: "doc",

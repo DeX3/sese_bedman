@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <h3>Unbilled reservations</h3>
+</div>
+<div class="modal-body select-reservation-dialog">
+    <searchbox ng-model="search"autofocus/>
+    <paginated ng-model="reservations" page="page" per-Page="{{perPage}}">
+        <div class="reservation"
+             ng-repeat="reservation in reservations.items">
+
+            <div class="reservation-id">
+                Reservation #{{reservation.id}}
+                for {{reservation.duration()}} day(s):
+                {{reservation.from | date}} - {{reservation.to | date}}
+            </div>
+
+            <div class="clear-left"></div>
+
+            <div class="customers">
+                Customers:
+                <ul ng-if="reservation.customers.length">
+                    <li ng-repeat="customer in reservation.customers">
+                        {{customer.firstName}} {{customer.lastName}}
+                    </li>
+                </ul>
+                <span ng-if="!reservation.customers.length">None</span>
+            </div>
+
+            <div class="rooms">
+                Rooms:
+                <ul ng-if="reservation.rooms.length">
+                    <li ng-repeat="room in reservation.rooms">
+                        {{room.name}}
+                    </li>
+                </ul>
+                <span ng-if="!reservation.rooms.length">None</span>
+            </div>
+            <div class="clear-right"></div>
+            <div class="add">
+                <button type="button"
+                        class="btn btn-primary glyphicon glyphicon-ok",
+                        ng-click="select(reservation)">
+                </button>
+            </div>
+        </div>
+
+        <p ng-if="reservations.items.length === 0">
+            No matching reservations!
+        </p>
+    </paginated>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn" 
+            ng-click="cancel()">Cancel</button>
+</div>

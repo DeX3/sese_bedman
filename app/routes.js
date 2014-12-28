@@ -8,12 +8,15 @@
 var express = require( "express" );
 var path = require( "path" );
 
+var RoomController = require( "./controllers/RoomController" );
+var CustomerController = require( "./controllers/CustomerController" );
+var ReservationController = require( "./controllers/ReservationController" );
+var BillController = require( "./controllers/BillController" );
 
 /* does stuff */
 module.exports.setup = function( app ) {
 
     var router = express.Router();
-    var controllers = app.get( "controllers" );
     
     // serve static files under "/public"
     app.use( "/public", express.static(path.join(__dirname, "public")) );
@@ -24,18 +27,22 @@ module.exports.setup = function( app ) {
     } );
 
     // creates basic CRUD-routes for the given controller
-    var crud = function( routepart, controller ) {
-        router.get( "/" + routepart, controller.index );
-        router.post( "/" + routepart, controller.create );
-        router.get( "/" + routepart + "/:id", controller.get );
-        router.put( "/" + routepart + "/:id", controller.update );
-        router.delete( "/" + routepart + "/:id", controller.destroy );
+    var crud = function( routepart, ctrl ) {
+        router.get( "/" + routepart, ctrl.index.bind(ctrl) );
+        router.post( "/" + routepart, ctrl.create.bind(ctrl) );
+        router.get( "/" + routepart + "/:id", ctrl.get.bind(ctrl) );
+        router.put( "/" + routepart + "/:id", ctrl.update.bind(ctrl) );
+        router.delete( "/" + routepart + "/:id", ctrl.destroy.bind(ctrl) );
     };
     
-    crud( "customers", controllers.CustomerController );
-    crud( "bills", controllers.BillController );
-    crud( "reservations", controllers.ReservationController );
-    crud( "rooms", controllers.RoomController );
+    crud( "customers", new CustomerController() );
+    crud( "rooms", new RoomController() );
+    crud( "reservations", new ReservationController() );
+
+    var bills = new BillController();
+    crud( "bills", bills );
+
+    router.get( "/bills/:id/details", bills.details.bind(bills) );
 
     // enable the api routes under "/api"
     app.use( "/api", router );

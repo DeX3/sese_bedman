@@ -1,6 +1,6 @@
 "use strict";
 var Checkit = require( "checkit" );
-var bookshelf = require( "./base" );
+var bookshelf = require( "./ModelBase" );
 var _ = require( "underscore" );
 require( "./Customer" );
 require( "./Room" );
@@ -23,9 +23,12 @@ module.exports = bookshelf.model( "Reservation", {
     customers: function() {
         return this.belongsToMany( "Customer" );
     },
-	rooms: function(){
+	rooms: function() {
 		return this.belongsToMany("Room").withPivot("configuration");
 	},
+    bill: function() {
+        return this.belongsTo( "Reservation" );
+    },
     validate: function( model, attrs, options ) {
         return validator.run( this.attributes );
     },
@@ -35,5 +38,12 @@ module.exports = bookshelf.model( "Reservation", {
     updateRooms: function( rooms, options ) {
         var opts = _.extend( { pivots: ["configuration"] }, options );
         return this.updateRelation( "rooms", rooms, opts );
+    },
+    // gets duration in days
+    duration: function() {
+        var from = new Date( this.get("from") );
+        var to = new Date( this.get("to") );
+
+        return (to - from)/(1000 * 60 * 60 * 24) + 1;
     }
 } );

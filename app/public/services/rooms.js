@@ -39,10 +39,12 @@ app.factory( "Room", function( $Model ) {
         },
         {
             isConfigurationAvailable: function( cfg ) {
-                return CONFIGURATIONS[this.maxCap].indexOf( cfg ) >= 0;
+                var maxCap = this.maxCap || 1;
+                return CONFIGURATIONS[maxCap].indexOf( cfg ) >= 0;
             },
             getAvailableConfigurations: function() {
-                return (CONFIGURATIONS[this.maxCap] || []).map(
+                var maxCap = this.maxCap || 1;
+                return (CONFIGURATIONS[maxCap] || []).map(
                     function( config ) {
                         return {
                             value: config,

@@ -1,19 +1,12 @@
 "use strict";
 
-var DefaultController = require( "./DefaultController" );
+var ControllerBase = require( "./ControllerBase" );
+var Room = require( "../models/Room" );
 
-module.exports.setup = function( app ) {
-
-    var models = app.get( "models" );
-    var Room = models.Room;
-
-    var ctrl = {};
-    ctrl.index = DefaultController.index.bind( null, Room );
-    ctrl.get = DefaultController.get.bind( null, Room );
-    ctrl.create = DefaultController.create.bind( null, Room );
-    ctrl.update = DefaultController.update.bind( null, Room );
-    ctrl.destroy = DefaultController.destroy.bind( null, Room );
-
-    return ctrl;
-};
-
+module.exports = ControllerBase.extend( {
+    Model: Room,
+    pagination: {
+        type: "auto",
+        perPage: 10
+    }
+} );

@@ -1,15 +1,18 @@
 <h1>Room list</h1>
 
-<li ng-show="rooms.length" ng-repeat="room in rooms">
-    <ul>
-        <a href="#/rooms/{{room.id}}">
-            {{room.name}}
-        </a>
-    </ul>
-</li>
+<paginated ng-model="rooms" page="page" perPage="{{perPage}}">
+    <li ng-show="rooms.items.length" ng-repeat="room in rooms.items">
+        <ul>
+            <a href="#/rooms/{{room.id}}">
+                {{room.name}}
+            </a>
+        </ul>
+    </li>
+    <p ng-hide="rooms.items.length">
+        No rooms available!
+    </p>
 
-<p ng-hide="rooms.length">
-    No rooms available (yet)!
-</p>
+    <a href="#/rooms/create">Create a new room</a>
 
-<a href="#/rooms/create">Create a new room</a>
+</paginated>
+

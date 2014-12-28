@@ -38,10 +38,6 @@ app.controller( "ReservationEditCtrl",
         } );
     }
 
-    Customer.$query().then( function( availableCustomers ) {
-        $scope.availableCustomers = availableCustomers;
-    } );
-    
     Room.$query().then( function( availableRooms ) {
         $scope.availableRooms = availableRooms;
     } );
@@ -63,7 +59,10 @@ app.controller( "ReservationEditCtrl",
 
     $scope.addCustomer = function() {
         if( $scope.selectedCustomer ) {
-            var customer = $scope.selectedCustomer.originalObject;
+            var customer = new Customer(
+                $scope.selectedCustomer.originalObject
+            );
+
             $scope.selectedCustomers.push( customer );
 
             //select the item in the listbox right away to avoid empty item

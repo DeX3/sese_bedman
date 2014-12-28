@@ -1,15 +1,21 @@
 <h1>Customer list</h1>
 
-<ul ng-show="customers.length" ng-repeat="customer in customers">
-    <li>
-        <a href="#/customers/{{customer.id}}">
-            {{customer.fullName()}}
-        </a>
-    </li>
-</ul>
+<searchbox ng-model="search" />
 
-<p ng-hide="customers.length">
-    No customers available!
-</p>
+<paginated ng-model="customers" page="page" perPage="{{perPage}}">
+    <ul ng-show="customers.items.length"
+        ng-repeat="customer in customers.items">
+        <li>
+            <a href="#/customers/{{customer.id}}">
+                {{customer.fullName()}}
+            </a>
+        </li>
+    </ul>
 
-<a href="#/customers/create">Create a new customer</a>
+    <p ng-hide="customers.items.length">
+        No customers available!
+    </p>
+
+    <a href="#/customers/create">Create a new customer</a>
+</paginated>
+

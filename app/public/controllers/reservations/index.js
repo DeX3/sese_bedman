@@ -6,7 +6,18 @@ app.controller( "ReservationListCtrl",
                 function( $scope,
                           Reservation ) {
 
-    Reservation.$query().then( function( reservations ) {
-        $scope.reservations = reservations;
-    } );
+    $scope.perPage = 10;
+
+    $scope.$watchGroup( ["page", "search"], function() {
+        Reservation.$query( {
+            page: $scope.page || 1,
+            perPage: $scope.perPage,
+            s: $scope.search
+        } ).then( function( reservations ) {
+            $scope.reservations = reservations;
+        } );
+    }, true );
+
+
+    $scope.page = 1;
 } );

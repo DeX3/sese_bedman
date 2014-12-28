@@ -8,9 +8,8 @@
                 id="customerSearch"
                 placeholder="Search customers..."
                 selected-object="selectedCustomer"
-                local-data="availableCustomers"
+                remote-url="/api/customers?s="
                 minlength="1"
-                search-fields="firstName,lastName"
                 title-field="firstName,lastName"
                 ng-keypress="onSearchKeyPress($event)"
                 class="customer-selector">
@@ -19,8 +18,12 @@
                 <button type="button"
                         ng-click="addCustomer()"
                         ng-disabled="!selectedCustomer"
-                        class="btn btn-primary pull-left add-customer-btn">
-                    +
+                        class="btn
+                               btn-primary
+                               pull-left
+                               glyphicon
+                               glyphicon-plus
+                               add-customer-btn">
                 </button>
             </span>
         </div>
@@ -51,8 +54,12 @@
                 <button type="button"
                         ng-click="addRoom()"
                         ng-disabled="!selectedRoom"
-                        class="btn btn-primary pull-left add-room-btn">
-                    +
+                        class="btn
+                               btn-primary
+                               pull-left
+                               glyphicon
+                               glyphicon-plus
+                               add-room-btn">
                 </button>
             </span>
         </div>

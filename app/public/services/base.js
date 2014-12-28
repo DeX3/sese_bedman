@@ -131,7 +131,12 @@ app.factory( "$Model", function( $http, DateService, ValidationError ) {
 
             ret += encodeURIComponent( name );
             ret += "=";
-            ret += encodeURIComponent( params[name] );
+            
+            var value = params[name];
+            if( typeof value === "undefined" ) {
+                value = "";
+            }
+            ret += encodeURIComponent( value );
         } );
         
         return ret;
@@ -168,7 +173,9 @@ app.factory( "$Model", function( $http, DateService, ValidationError ) {
                 //  items: Array
                 //}
 
-                data.items.map( Model.$makeObjectFromResponse.bind(self) );    
+                data.items = data.items.map(
+                    Model.$makeObjectFromResponse.bind(self)
+                );    
                 data.$paginated = true;
 
                 return data;

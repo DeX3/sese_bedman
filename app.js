@@ -40,11 +40,10 @@ app.use( config.get("logger") );
 
 app.use( bodyParser.json() );
 
-var bookshelf = require("./app/models/base");
+var bookshelf = require("./app/models/ModelBase");
 app.set( "bookshelf", bookshelf ); 
 app.set( "models", models );
 
-controllers.setup( app );
 app.set( "controllers", controllers );
 
 app.set( "views", "app/views" );

@@ -39,7 +39,7 @@ var schemaPromises = [];
  * attributes that are strings, but declared as date(time) according to the
  * schema to dates.
  *
- * @memberof Model#
+ * @memberof Model
  * @private
  */
 function fixDateTimeIn( object, name ) {
@@ -167,34 +167,26 @@ bookshelf.Model = bookshelf.Model.extend( {
                                "-" + pad( 2, date.getDate() + "", "0" );
         }
     },
-
     
     /**
      * Updates a models relation defined via hasMany or belongsToMany.
+     *
+     * @param {string} relationName
+     *        The relation to update as given by `hasMany` or `belongsToMany`
+     * @param {Array.<Model|number>} data
+     *        An array of models and/or IDs.
+     * @param {ModelBase.UpdateRelationOptions} options
+     *        Additional options.
      *
      * @example
      *  reservation.updateRelation( "rooms",
      *                              [ { id: 1, configuration: "SINGLE" } ],
      *                              { pivots: [ "configuration" ] }
-     *                            )
+     *                            );
      *
-     * The `options`-parameter supports the following keys:
-     *  * `pivots`: An array of strings each being a pivot-data column in the
-     *              joining table. Each of these keys will be plucked from each
-     *              element in data and updated in the joining table via
-     *              `updatePivot` (or added there).
-     *  * `columnName`: This specifies the name of the id-column in the joining
-     *                  table that holds the foreign key. If not specified, this
-     *                  is inferred by singularizing `relationName` and adding
-     *                  an "_id" suffix.
-     *  * `transacting`: Use this transaction for all underlying bookshelf
-     *                   operations.
+     * @memberof Model#
+     * @protected
      *
-     * @param relationName The relation to update as given by `hasMany` or
-     *                     `belongsToMany`
-     * @param data An array of models and/or IDs.
-     * @param options Additional options, supported options are: `pivots`,
-     *                `columnName` and `tx`.
      */
     updateRelation: function( relationName,
                               data,
@@ -262,30 +254,21 @@ bookshelf.Model = bookshelf.Model.extend( {
                 }
             } );
 
-            console.dir( toUpdate );
-
             // now, update all needed pivots
             var promises = [];
             _.each( toUpdate, function( pivots, id ) {
                 var opts = { query: { where: {} } };
                 opts.query.where[options.columnName] = id;
                 opts.transacting = options.transacting;
-                console.log( "updating pivot" );
-                console.dir( pivots );
-                console.dir( opts.query );
                 var promise = self[relationName]().updatePivot(
                     pivots,
                     opts
-                ).then( function() {
-                    console.log( "pivot updated" );
-                } );
+                );
 
                 promises.push( promise );
             } );
 
             var opts = { transacting: options.transacting };
-
-            console.dir( toRemove );
 
             // remove old relations and add new ones
             promises.push( self[relationName]().detach(toRemove, opts) );
@@ -311,7 +294,7 @@ var originalExtend = bookshelf.Model.extend;
  * Create a new model class, extending from the base. This will check the
  * database to store the model's schema.
  *
- * @memberof Model
+ * @memberof Model#
  * @public
  */
 bookshelf.Model.extend = function( options ) {
@@ -333,3 +316,20 @@ module.exports.onSchemaLoaded = function( callback ) {
     BPromise.all( schemaPromises ).then( callback );
 };
 
+
+
+/**
+ * @typedef UpdateRelationOptions
+ *
+ * Additional optoins for Model#updateRelation
+ *
+ * @type {object}
+ * @property {string[]} [pivots]
+ *           Array of pivot-data column-names in the joining table. Each of
+ *           these keys will be plucked from each element in data and updated in
+ *           the joining table via `updatePivot` (or added there).
+ * @property {KnexTransaction} [transacting] Use this transaction for all
+ *           underlying bookshelf operations.
+ *
+ * @memberof Model
+ */

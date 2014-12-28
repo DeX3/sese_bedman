@@ -1,22 +1,13 @@
-<h1>Edit bill</h1>
+<h1 ng-if="!bill.$isNew">Edit bill</h1>
+<h1 ng-if="bill.$isNew">New bill</h1>
 <form ng-submit="save()" class="bill-form">
-    <div>
+    <div ng-if="!bill.$isNew">
         <label for="billId">Bill-ID:</label>
         <input type="text"
                name="billID"
-               ng-model="bill.billId"
+               ng-model="bill.id"
                placeholder="Bill-ID"
-               required
-               class="form-control"></input>
-    </div>
-    <div class="form-group">
-        <label for="price">Price:</label>
-        <input type="number"
-               name="price"
-               ng-model="bill.price"
-               placeholder="0.00"
-               pattern="[0-9]+([\.|,][0-9]+)?" step="0.01"
-               required
+               readonly
                class="form-control"></input>
     </div>
     <div class="form-group">
@@ -27,18 +18,139 @@
                ng-model-options="{ timezone: 'UTC' }"
                class="form-control"></input>
     </div>
+    <div class="reservations form-group">
+        <label for="reservations">Reservations:</label>
+        <select name="reserations"
+                ng-model="currentReservation"
+                required
+                class="form-control"
+                size="10"
+                ng-options="reservation.quickInfoString() for
+                                            (id, reservation) in reservations">
+        </select>
+        <a
+            class="btn btn-default"
+            ng-click="addReservation()">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add
+        </a>
+        <a
+            class="btn btn-default"
+            ng-click="removeReservation( currentReservation )">
+            <span class="glyphicon glyphicon-remove"></span>
+            Remove
+        </a>
+    </div>
     <div class="form-group">
-        <label for="customer_id">Customer:</label>
-        <select name="customer_id"
-               ng-model="bill.customer"
-               ng-options="customer.fullName() for customer in customers"
-               required
-               class="form-control"></select>
+        <label for="customer_id">
+            Paying customer:
+        </label>
+        <div>
+            <select name="customer_id"
+                   ng-model="selectedPayer"
+                   ng-options="option.value as option.text for
+                               option in payerOptions"
+                   required
+                   class="form-control">
+            </select>
+        </div>
+
+        <div ng-show="selectedPayer === 'search'">
+            <angucomplete-alt
+                id="customer-search"
+                placeholder="Search customers..."
+                selected-object="searchedPayer"
+                remote-url="/api/customers?s="
+                minlength="1"
+                title-field="firstName,lastName"
+                class="customer-selector">
+            </angucomplete-alt>
+            <span id="customer-indicator"
+                  class="glyphicon"
+                  ng-class="{ 'glyphicon-ok': searchedPayer,
+                              'glyphicon-remove': !searchedPayer }"
+            >
+            </span>
+        </div>
+    </div>
+    <div class="bill-details">
+        <label for="bill-details">Bill details</label>
+        <table id="details"
+               ng-if="bill.details && bill.details.total === bill.price">
+            <tr ng-repeat-start="reservation in bill.details.reservations">
+                <th>
+                    Reservation #{{reservation.id}}
+                </th>
+                <td>
+                    {{reservation.from | date}}-{{reservation.to | date}}
+                </td>
+            </tr>
+            <tr ng-repeat-start="room in reservation.rooms">
+                <td>
+                    Room {{room.name}}
+                </td>
+                <td class="currency">
+                    {{room.dailyRate | currency}}
+                </td>
+                <td>&nbsp;x {{reservation.days}}</td>
+                <td class="currency">{{room.rate | currency}}</td>
+            </tr>
+            <tr ng-repeat-end></tr>
+            <tr>
+                <td>Subtotal</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="currency">{{reservation.subtotal | currency}}</td>
+            </tr>
+            <tr ng-if="reservation.discount > 0">
+                <td>Discount</td>
+                <td></td>
+                <td></td>
+                <td class="currency">
+                    {{reservation.discountPercent}}%
+                    (via {{reservation.discountCustomer.fullName()}})
+                </td>
+                <td class="currency">-{{reservation.discount | currency}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="currency">{{reservation.total | currency}}</td>
+            </tr>
+            <tr ng-repeat-end></tr>
+            <tr class="result">
+                <th>Total</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="currency">{{bill.details.total | currency}}</td>
+            </tr>
+        </table>
+        <p ng-if="bill.details && bill.details.total !== bill.price">
+            The bill details can not be calculated, because data (e.g. customer
+            discounts, room prices) have changed since the bill was first
+            created.
+            
+            <table>
+                <tr>
+                    <th>Total:</th>
+                    <td>{{bill.price | currency}}</td>
+                </tr>
+            </table>
+        </p>
+        <p ng-if="!bill.details">
+            Bill details not (yet) available!
+        </p>
     </div>
 
-    <input type="submit" class="btn btn-primary"></input>
+    <input type="submit" class="btn btn-primary submit"></input>
 </form>
 
-<button class="btn delete-btn" ng-click="destroy()">
+<button class="btn btn-danger delete-btn" ng-click="destroy()">
     Delete this bill
 </button>

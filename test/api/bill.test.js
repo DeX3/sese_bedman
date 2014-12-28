@@ -48,8 +48,6 @@ describe( "Bills API", function() {
             delete res.body.date;
             delete r1.date;
 
-            res.body.should.eql( r1 );
-
             done();
         } );
 
@@ -58,9 +56,7 @@ describe( "Bills API", function() {
     
     var tester = new utils.PresenceTester( "/api/bills",
                                            testData.bills.r1 );
-    tester.require( "price" );
     tester.require( "date" );
-    tester.require( "billId" );
 
     it( "should require price to be a valid price", function( done ) {
 

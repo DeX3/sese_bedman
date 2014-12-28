@@ -1,18 +1,20 @@
 "use strict";
 
-var DefaultController = require( "./DefaultController" );
+var ControllerBase = require( "./ControllerBase" );
+var Customer = require( "../models/Customer" );
 
-module.exports.setup = function( app ) {
+module.exports = ControllerBase.extend( {
 
-    var models = app.get( "models" );
-    var Customer = models.Customer;
+    Model: Customer,
 
-    var ctrl = {};
-    ctrl.index = DefaultController.index.bind( null, Customer );
-    ctrl.create = DefaultController.create.bind( null, Customer );
-    ctrl.destroy = DefaultController.destroy.bind( null, Customer );
+    pagination: {
+        type: "auto",
+        perPage: 10,
+    },
 
-    ctrl.update = function( req, res ) {
+    searchable: ["firstName", "lastName", "company"],
+
+    update: function( req, res ) {
         
         var id = req.params.id;
         var data = Object.merge( req.body, req.query );
@@ -32,10 +34,10 @@ module.exports.setup = function( app ) {
             res.status( 500 ).json( error );
         } );
         
-    };
+    },
     
     //get a customer data and all his reservations
-    ctrl.get = function( req, res ) {
+    get: function( req, res ) {
 
         var id = req.params.id;
 
@@ -51,8 +53,7 @@ module.exports.setup = function( app ) {
             console.dir( error );
             res.status( 500 ).json( error );
         } );
-    };
+    }
 
-    return ctrl;
-};
+} );
 

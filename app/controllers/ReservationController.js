@@ -1,19 +1,94 @@
 "use strict";
 
-var DefaultController = require( "./DefaultController" );
+var ControllerBase = require( "./ControllerBase" );
+var Reservation = require( "../models/Reservation" );
+var bookshelf = require( "../models/ModelBase" );
 var CheckitError = require( "checkit" ).Error;
+var _ = require( "underscore" );
 
-module.exports.setup = function( app ) {
+module.exports = ControllerBase.extend( {
 
-    var models = app.get( "models" );
-    var Reservation = models.Reservation;
-    var bookshelf = app.get( "bookshelf" );
+    Model: Reservation,
 
-    var ctrl = {};
-    ctrl.index = DefaultController.index.bind( null, Reservation );
-    ctrl.destroy = DefaultController.destroy.bind( null, Reservation );
+    pagination: {
+        perPage: 10
+    },
 
-    ctrl.update = function( req, res ) {
+    index: function( req, res ) {
+        var query = Reservation.query();
+
+        //check if a search query is specified
+        query.select( "reservation.*" );
+
+        query.leftJoin( "customers_reservation",
+                         "reservation.id",
+                         "customers_reservation.reservation_id" );
+
+        query.leftJoin( "customers",
+                         "customers_reservation.customer_id",
+                         "customers.id" );
+
+        query.distinct();
+
+        if( req.query.billed === 'false' ) {
+            query = query.whereNull( "bill_id" );
+        } else if( req.query.billed === true ) {
+            query = query.whereNotNull( "bill_id" );
+        }
+
+
+        if( req.query.s ) {
+            var terms = req.query.s.split( /\s/ );
+
+            var searchable = [ "customers.firstName",
+                               "customers.lastName",
+                               "customers.company" ];
+            
+            query = query.andWhere( function() {
+                var self = this;
+                _.each( terms, function( term ) {
+                    _.each( searchable, function( columnName ) {
+                        self.orWhere( columnName,
+                                                 "LIKE",
+                                                 "%" + term + "%" );
+                    } );
+                } );
+            } );
+
+        }
+
+        var p;
+        // if pagination is specified
+        // if pagination is set to "auto", only paginate if "page" is present
+        if( this.pagination &&
+            (this.pagination.type !== "auto" || req.query.page) ) {
+
+            p = this.paginate(
+                query,
+                req.query
+            ).then( function(results) {
+                return results.items.load(
+                    ["customers", "rooms"]
+                ).then( function() {
+                    return results;
+                } );
+            } );
+        } else {
+            p = query.select().then( function( results ) {
+                return Reservation.collection( results );
+            } );
+        }
+        
+        p.then( function( results ) {
+            res.json( results );
+        } ).catch( function(error) {
+            console.error( error );
+            res.status( 500 ).json( error );
+        } );
+        
+    },
+
+    update: function( req, res ) {
 
         var id = req.params.id;
         var data = Object.merge( req.body, req.query );
@@ -53,9 +128,9 @@ module.exports.setup = function( app ) {
             console.error( error );
             res.status( 500 ).json( error );
         } );
-    };
+    },
 
-    ctrl.create = function( req, res ) {
+    create: function( req, res ) {
         
         var data = Object.merge( req.body, req.query );
         var customers = data.customers;
@@ -80,9 +155,9 @@ module.exports.setup = function( app ) {
             console.error( error );
             res.status( 500 ).json( error );
         } );
-    };
+    },
 
-    ctrl.get = function( req, res ) {
+    get: function( req, res ) {
         
         var id = req.params.id;
 
@@ -104,8 +179,7 @@ module.exports.setup = function( app ) {
             console.error( error );
             res.status( 500 ).json( error );
         } );
-    };
+    }
 
-    return ctrl;
-};
+} );
 

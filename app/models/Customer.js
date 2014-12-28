@@ -1,6 +1,6 @@
 "use strict";
 var Checkit = require( "checkit" );
-var bookshelf = require( "./base" );
+var bookshelf = require( "./ModelBase" );
 
 require( "./Reservation" );
 

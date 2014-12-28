@@ -1,15 +1,17 @@
 <h1>Bills list</h1>
 
-<li ng-show="bills.length" ng-repeat="bill in bills">
-    <ul>
-        <a href="#/bills/{{bill.id}}">
-            {{bill.billId}}
-        </a>
-    </ul>
-</li>
+<paginated ng-model="bills" page="page" perPage="{{perPage}}">
+    <li ng-show="bills.items.length" ng-repeat="bill in bills.items">
+        <ul>
+            <a href="#/bills/{{bill.id}}">
+                {{bill.id}}
+            </a>
+        </ul>
+    </li>
+    <p ng-hide="bills.items.length">
+        No bills available!
+    </p>
+    
+    <a href="#/bills/create">Create a new bill</a>
 
-<p ng-hide="bills.length">
-    No bills available!
-</p>
-
-<a href="#/bills/create">Create a new bill</a>
+</paginated>

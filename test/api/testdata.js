@@ -19,9 +19,8 @@ module.exports = {
     },
     bills: {
         r1: {
-            billId: "r1",
             date: "1988-10-04",
-            price: 12.12
+            reservations: []
         },
     },
     rooms: {
