@@ -18,7 +18,7 @@ describe( "Customer controllers", function() {
                               $httpBackend,
                               Customer ) {
 
-            $httpBackend.when( "GET", "/api/customers" )
+            $httpBackend.when( "GET", "/api/customers?page=1&perPage=10&s=" )
                         .respond( [] );
 
             var ctrl = $controller( "CustomerListCtrl", {
@@ -37,7 +37,7 @@ describe( "Customer controllers", function() {
                               $httpBackend,
                               Customer ) {
 
-            $httpBackend.when( "GET", "/api/customers" )
+            $httpBackend.when( "GET", "/api/customers?page=1&perPage=10&s=" )
                         .respond( [] );
 
             var scope = $rootScope.$new();

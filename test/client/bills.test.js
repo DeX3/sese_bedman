@@ -18,7 +18,7 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
-            $httpBackend.when( "GET", "/api/bills" )
+            $httpBackend.when( "GET", "/api/bills?page=1&perPage=10" )
                         .respond( [] );
 
             var ctrl = $controller( "BillsListCtrl", {
@@ -42,17 +42,12 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [] );
-
             var ctrl = $controller( "BillsEditCtrl", {
                 $scope: $rootScope.$new(),
                 $routeParams: { id: "create" },
                 $location: $location,
                 Bill: Bill
             } );
-
-            $httpBackend.flush();
 
             chai.expect( ctrl ).to.exist;
         } ) );
@@ -64,9 +59,6 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [] );
-
             var scope = $rootScope.$new();
 
             $controller( "BillsEditCtrl", {
@@ -75,8 +67,6 @@ describe( "Bills controllers", function() {
                 $location: $location,
                 Bill: Bill
             } );
-
-            $httpBackend.flush();
 
             chai.expect( scope.bill ).to.exist;
         } ) );
@@ -89,10 +79,9 @@ describe( "Bills controllers", function() {
                               Bill ) {
 
 
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [] );
             $httpBackend.when( "GET", "/api/bills/4711" )
-                        .respond( { id: 4711 } );
+                        .respond( { id: 4711,
+                                    reservations: [] } );
 
             var scope = $rootScope.$new();
             $controller( "BillsEditCtrl", {
@@ -116,11 +105,10 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [] );
             $httpBackend.when( "POST", "/api/bills" )
                         .respond( { id: 4711, 
-                                    customer: {} } );
+                                    customer: {},
+                                    reservations: [] } );
 
             var scope = $rootScope.$new();
 
@@ -130,8 +118,6 @@ describe( "Bills controllers", function() {
                 $location: $location,
                 Bill: Bill
             } );
-
-            $httpBackend.flush();
 
             scope.save();
 
@@ -145,11 +131,10 @@ describe( "Bills controllers", function() {
                               $httpBackend,
                               Bill ) {
 
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [] );
-
             $httpBackend.when( "GET", "/api/bills/4711" )
-                        .respond( { id: 4711 } );
+                        .respond( { id: 4711,
+                                    reservations: [],
+                                    customers: [] } );
 
             $httpBackend.when( "DELETE", "/api/bills/4711" )
                         .respond( {} );
@@ -165,7 +150,6 @@ describe( "Bills controllers", function() {
                 dialogs: dialogs,
                 Bill: Bill
             } );
-
 
             $httpBackend.flush();
 

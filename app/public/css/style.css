@@ -26,7 +26,8 @@ form.reservation-form select.rooms-selector {
 form.reservation-form button.add-customer-btn,
 form.reservation-form button.add-room-btn {
     height: 26px;
-    line-height: 13px;
+    line-height: 10px;
+    margin-top: -1px;
 }
 
 form.reservation-form div.customer-group,
@@ -68,7 +69,7 @@ form.reservation-form div.to-group {
 }
 
 form.reservation-form div.projected-bill table {
-    width: 340px;
+    width: 500px;
     margin-left: 20px;
     margin-bottom: 30px;
 }
@@ -88,3 +89,66 @@ button.delete-btn {
     margin-top: 10px;
 }
 
+div.search {
+    margin-bottom: 10px;
+}
+
+div.search input {
+    margin-top: 1px;
+}
+
+div.select-reservation-dialog div.reservation {
+    height: 100px;
+}
+
+div.select-reservation-dialog div.reservation div.reservation-id,
+div.select-reservation-dialog div.reservation div.customers,
+div.select-reservation-dialog div.reservation div.rooms {
+    float: left;
+    margin-left: 20px;
+    width: 200px
+}
+div.select-reservation-dialog div.reservation div.reservation-id {
+    width: auto;
+}
+
+div.select-reservation-dialog div.reservation div.add {
+    float: right;
+}
+div.select-reservation-dialog div.reservation div.add button {
+    height: 60px;
+    width: 60px;
+}
+
+div.clear-left {
+    clear: left;
+}
+
+form.bill-form select {
+    margin-bottom: 8px;
+}
+
+form.bill-form #customer-search {
+    float: left;
+}
+
+form.bill-form #customer-indicator {
+    margin-left: 5px;
+    margin-top: 4px;
+}
+
+form.bill-form table#details {
+    width: 100%;
+}
+
+form.bill-form table#details .currency {
+    text-align: right;
+}
+
+form.bill-form table#details .result {
+    border-top: 1px solid #000;
+}
+
+form.bill-form input.submit {
+    margin-top: 20px;
+}

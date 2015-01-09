@@ -6,7 +6,6 @@ exports.up = function(knex, Promise) {
         table.timestamps();
         table.decimal( "price" ).notNullable();
         table.date( "date" ).notNullable();
-        table.string( "billId" ).unique();
     } );
 };
 

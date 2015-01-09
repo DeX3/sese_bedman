@@ -1,15 +1,20 @@
 <h1>Reservation list</h1>
 
-<li ng-show="reservations.length" ng-repeat="reservation in reservations">
-    <ul>
-        <a href="#/reservations/{{reservation.id}}">
-            {{reservation.id}}
-        </a>
-    </ul>
-</li>
+<searchbox ng-model="search" />
 
-<p ng-hide="reservations.length">
-    No reservations available!
-</p>
+<paginated ng-model="reservations" page="page" per-page="{{perPage}}">
+    <li ng-show="reservations.items.length"
+        ng-repeat="reservation in reservations.items">
+        <ul>
+            <a href="#/reservations/{{reservation.id}}">
+                #{{reservation.id}}
+            </a>
+        </ul>
+    </li>
+    <p ng-hide="reservations.items.length">
+        No reservations available!
+    </p>
 
-<a href="#/reservations/create">Create a new reservation</a>
+    <a href="#/reservations/create">Create a new reservation</a>
+
+</paginated>

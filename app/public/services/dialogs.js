@@ -18,6 +18,36 @@ app.service( "dialogs", function( $modal ) {
                 title: "Confirm",
                 text: "Are you sure?"
             }
+        },
+        "selectReservation": {
+            modalOptions: {
+                backdrop: "static",
+                keyboard: "false",
+                modalFade: true,
+                templateUrl: "public/views/partials/selectReservation.html"
+            },
+            controller: function( $scope, $modalInstance, Reservation ) {
+                $scope.perPage = 3;
+                $scope.$watchGroup( ["search", "page"], function() {
+                    Reservation.$query( {
+                        s: $scope.search,
+                        perPage: $scope.perPage,
+                        page: $scope.page,
+                        billed: false
+                    } ).then( function( reservations ) {
+                        $scope.reservations = reservations;
+                    } );
+                } );
+                $scope.page = 1;
+
+                $scope.select = function( reservation ) {
+                    $modalInstance.close( reservation );
+                };
+
+                $scope.cancel = function() {
+                    $modalInstance.dismiss( "cancel" );
+                };
+            }
         }
     };
 
@@ -38,21 +68,25 @@ app.service( "dialogs", function( $modal ) {
                 customOptions = { text: customOptions };
             }
 
+            var ctrl = customOptions.controller || options.controller;
+            delete customOptions.controller;
+
+            if( !ctrl ) {
+                ctrl = function( $scope, $modalInstance ) {
+                    angular.extend( $scope, scope );
+
+                    $scope.ok = function() {
+                        $modalInstance.close( true );
+                    };
+
+                    $scope.cancel = function() {
+                        $modalInstance.dismiss( "cancel" );
+                    };
+                };
+            }
+
             angular.extend( scope, customOptions );
-
-            console.dir( scope );
-
-            modalOptions.controller = function( $scope, $modalInstance ) {
-                angular.extend( $scope, scope );
-
-                $scope.ok = function() {
-                    $modalInstance.close( true );
-                };
-
-                $scope.cancel = function() {
-                    $modalInstance.dismiss( "cancel" );
-                };
-            };
+            modalOptions.controller = ctrl;
 
             return $modal.open( modalOptions ).result;
         };

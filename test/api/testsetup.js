@@ -2,7 +2,7 @@
 
 process.env.NODE_ENV = "test";
 var config = require( "config" );
-var bookshelf = require( "../../app/models/base" );
+var bookshelf = require( "../../app/models/ModelBase" );
 var models = require( "../../app/models/models" );
 
 var mockApp = {

@@ -2,7 +2,7 @@
 
 var app = angular.module( "bedman" );
 
-app.factory( "DateService", function() {
+app.factory( "DateService", function( $filter ) {
 
     return {
         parseDate: function( datestr ) {
@@ -27,10 +27,12 @@ app.factory( "DateService", function() {
             if( !dateobj ) {
                 return null;
             }
+
+            var padLeft = $filter( "padLeft" );
             
-            return dateobj.getFullYear() + "-" +
-                   (dateobj.getMonth() + 1) + "-" +
-                   dateobj.getDate();
+            return padLeft( dateobj.getFullYear(), 4 ) + "-" +
+                   padLeft( (dateobj.getMonth() + 1), 2 ) + "-" +
+                   padLeft( dateobj.getDate(), 2 );
         }
     };
 } );

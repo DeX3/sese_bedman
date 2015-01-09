@@ -18,7 +18,7 @@ describe( "Reservation controllers", function() {
                               $httpBackend,
                               Reservation ) {
 
-            $httpBackend.when( "GET", "/api/reservations" )
+            $httpBackend.when( "GET", "/api/reservations?page=1&perPage=10&s=" )
                         .respond( [] );
 
             var scope = $rootScope.$new();
@@ -38,7 +38,7 @@ describe( "Reservation controllers", function() {
                               $httpBackend,
                               Reservation ) {
 
-            $httpBackend.when( "GET", "/api/reservations" )
+            $httpBackend.when( "GET", "/api/reservations?page=1&perPage=10&s=" )
                         .respond( [ {} ] );
 
             var scope = $rootScope.$new();
@@ -201,97 +201,6 @@ describe( "Reservation controllers", function() {
             scope.save();
 
             $httpBackend.flush();
-        } ) );
-
-        it( "should provide a list of customers to add to the reservation",
-            inject( function( $controller,
-                              $rootScope,
-                              $location,
-                              $httpBackend,
-                              Reservation,
-                              Customer ) {
-
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [
-                { firstName: "Homer", lastName: "Simpson" }
-            ] );
-            $httpBackend.when( "GET", "/api/rooms" )
-                        .respond( [] );
-            $httpBackend.when( "POST", "/api/reservations" )
-                        .respond( {} );
-
-            var scope = $rootScope.$new();
-            $controller( "ReservationEditCtrl", {
-                $scope: scope,
-                $routeParams: { id: "create" },
-                $location: $location,
-                Reservation: Reservation,
-                Customer: Customer
-            } );
-
-            $httpBackend.when( "GET", "/api/bills" )
-                        .respond( [] );
-            $httpBackend.flush();
-
-            chai.expect( scope.availableCustomers ).to.exist;
-            chai.expect( scope.availableCustomers ).not.to.be.empty;
-            chai.expect( scope.availableCustomers ).to.be.of.length( 1 );
-
-            chai.expect(
-                scope.availableCustomers[0].firstName
-            ).to.equal( "Homer" );
-
-            chai.expect(
-                scope.availableCustomers[0].lastName
-            ).to.equal( "Simpson" );
-
-        } ) );
-
-        it( "should enable adding customers to the reservation",
-            inject( function( $controller,
-                              $rootScope,
-                              $location,
-                              $httpBackend,
-                              Reservation,
-                              Customer ) {
-
-            $httpBackend.when( "GET", "/api/customers" )
-                        .respond( [
-                { firstName: "Homer", lastName: "Simpson" }
-            ] );
-            $httpBackend.when( "GET", "/api/rooms" )
-                        .respond( [] );
-            $httpBackend.when( "POST", "/api/reservations" )
-                        .respond( {} );
-
-            var scope = $rootScope.$new();
-            $controller( "ReservationEditCtrl", {
-                $scope: scope,
-                $routeParams: { id: "create" },
-                $location: $location,
-                Reservation: Reservation,
-                Customer: Customer
-            } );
-
-            $httpBackend.flush();
-
-            chai.expect( scope.availableCustomers ).to.exist;
-            chai.expect( scope.availableCustomers ).not.to.be.empty;
-            chai.expect( scope.availableCustomers ).to.be.of.length( 1 );
-
-            chai.expect(
-                scope.availableCustomers[0].firstName
-            ).to.equal( "Homer" );
-
-            chai.expect(
-                scope.availableCustomers[0].lastName
-            ).to.equal( "Simpson" );
-
-            scope.selectedCustomer = scope.availableCustomers[0];
-            scope.addCustomer();
-
-            chai.expect( scope.selectedCustomers ).to.have.length( 1 );
-
         } ) );
 
         it( "should enable adding rooms to the reservation",
