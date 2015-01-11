@@ -33,6 +33,18 @@ app.factory( "DateService", function( $filter ) {
             return padLeft( dateobj.getFullYear(), 4 ) + "-" +
                    padLeft( (dateobj.getMonth() + 1), 2 ) + "-" +
                    padLeft( dateobj.getDate(), 2 );
+        },
+
+        today: function() {
+            
+            var now = new Date();
+            
+            now.setHours( 0 );
+            now.setMinutes( 0 );
+            now.setSeconds( 0 );
+            now.setMilliseconds( 0 );
+
+            return now;
         }
     };
 } );

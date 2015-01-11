@@ -2,7 +2,7 @@
 
 var app = angular.module( "bedman" );
 
-app.factory( "Reservation", function( $Model, $filter ) {
+app.factory( "Reservation", function( $Model, $filter, DateService ) {
     return $Model.extend( {
         url: "/api/reservations",
         dates: ["from", "to"]
@@ -44,6 +44,19 @@ app.factory( "Reservation", function( $Model, $filter ) {
 
 
             return sb.join( "" );
+        },
+        hasStarted: function() {
+
+            var today = DateService.today();
+
+            return !this.$isNew && this.from && this.to && this.from < today;
+        },
+
+        hasEnded: function() {
+            
+            var today = DateService.today();
+
+            return !this.$isNew && this.from && this.to && this.to < today;
         }
     } );
 } );

@@ -64,16 +64,12 @@ module.exports = ControllerBase.extend( {
                     bill.id,
                     { transacting: tx }
                 ).then( function( details ) {
-                    console.log( "got details" );
                     return bill.save(
                         { price: details.total },
                         { patch: true, transacting: tx }
                     ).then( function( bill ) {
-                        console.log( "saved bill again" );
                         var ret = bill.toJSON();
                         ret.details = details;
-
-                        console.dir( ret );
 
                         return ret;
                     } );
@@ -184,6 +180,12 @@ module.exports = ControllerBase.extend( {
                 return reservation.rooms().fetch(
                     { transacting: options.transacting }
                 ).then( function( rooms ) {
+
+                    //check for early departure
+                    if( bill.get("date") < reservation.get("to") ) {
+                        //make sure that only stayed days are counted
+                        reservation.set( "to", bill.get("date") );
+                    }
 
                     var reservationDetails = {
                         id: reservation.id,
