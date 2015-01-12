@@ -5,6 +5,7 @@ app.controller( "ReservationEditCtrl",
                 function( $scope,
                           $routeParams,
                           $location,
+                          DateService,
                           Reservation,
                           dialogs,
                           Customer,
@@ -13,6 +14,8 @@ app.controller( "ReservationEditCtrl",
 
     $scope.selectedCustomers = [];
     $scope.selectedRooms = [];
+    $scope.today = DateService.formatDate( DateService.today() );
+
     if( $routeParams.id === "create" ) {
         $scope.reservation = new Reservation();
     } else {

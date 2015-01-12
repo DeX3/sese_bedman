@@ -1,5 +1,17 @@
 <h1>Edit reservation</h1>
 
+    <p ng-if="reservation.hasStarted()">
+        Note that this reservation has already started and thus changes can no
+        longer be made.
+    </p>
+
+    <p ng-if="!reservation.$isNew && !reservation.bill_id">
+        <span ng-if="!reservation.hasEnded()">Early departure?</span>
+        <a href="#/bills/create?for={{reservation.id}}">
+            Create a bill for this reservation
+        </a>
+    </p>
+
 <form name="form" ng-submit="save()" class="reservation-form">
     <div class="customer-group">
         <label for="customers">Customers:</label></br>
@@ -12,12 +24,14 @@
                 minlength="1"
                 title-field="firstName,lastName"
                 ng-keypress="onSearchKeyPress($event)"
+                disable-input="reservation.hasStarted()"
                 class="customer-selector">
             </angucomplete-alt>
             <span class="input-group-btn">
                 <button type="button"
                         ng-click="addCustomer()"
-                        ng-disabled="!selectedCustomer"
+                        ng-disabled="reservation.hasStarted() ||
+                                     !selectedCustomer"
                         class="btn
                                btn-primary
                                pull-left
@@ -35,6 +49,7 @@
                size="6"
                class="form-control customers"
                ng-keydown="onCustomersKeyDown($event)"
+               ng-disabled="reservation.hasStarted()"
                required
         ></select>
     </div>
@@ -48,12 +63,13 @@
                    ng-options="room as (room.name + 
                                         ' (max. ' + room.maxCap + ')')
                                for room in availableRooms"
+                   ng-disabled="reservation.hasStarted()"
                    class="form-control rooms-selector"
                    ></select>
             <span class="input-group-btn">
                 <button type="button"
                         ng-click="addRoom()"
-                        ng-disabled="!selectedRoom"
+                        ng-disabled="reservation.hasStarted() || !selectedRoom"
                         class="btn
                                btn-primary
                                pull-left
@@ -71,6 +87,7 @@
                size="6"
                class="form-control rooms"
                ng-keydown="onRoomsKeyDown($event)"
+               ng-disabled="reservation.hasStarted()"
                required
         ></select>
     </div>
@@ -83,6 +100,7 @@
                 ng-model="currentRoom.configuration"
                 placeholder="Select room configuration..."
                 required
+                ng-disabled="reservation.hasStarted()"
                 ng-options="config.value as config.name
                             for config in configurations"
                 class="form-control configuration-selector" name=""></select>
@@ -96,6 +114,8 @@
                    name="from"
                    ng-model="reservation.from"
                    ng-model-options="{ timezone: 'UTC' }"
+                   min="{{today}}"
+                   ng-disabled="reservation.hasStarted()"
                    class="form-control"></input>
         </div>
     </div>
@@ -106,6 +126,7 @@
                    name="to"
                    ng-model="reservation.to"
                    ng-model-options="{ timezone: 'UTC' }"
+                   ng-disabled="reservation.hasStarted()"
                    class="form-control"></input>
         </div>
     </div>
@@ -153,11 +174,14 @@
         </p>
     </div>
 
-    <input type="submit" class="btn btn-primary"></input>
+    <input type="submit"
+           class="btn btn-primary"
+           ng-disabled="reservation.hasStarted()"
+    ></input>
 
 </form>
 
 <button class="btn delete-btn" ng-click="destroy()">
-    Delete this reservation
+    Cancel this reservation
 </button>
 

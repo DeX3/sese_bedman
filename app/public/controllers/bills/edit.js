@@ -22,11 +22,21 @@ app.controller( "BillsEditCtrl",
         $timeout( function() {
             $scope.refreshCustomers();
         } );
+
+        if( "for" in $routeParams ) {
+            
+            Reservation.$get(
+                $routeParams["for"]
+            ).then( function( reservation ) {
+                $scope.reservations[reservation.id] = reservation;
+                $scope.currentReservation = reservation;
+                $scope.refreshCustomers();
+            } );
+        }
     } else {
         Bill.$get( $routeParams.id ).then( function( bill ) {
             $scope.bill = bill;
 
-            console.dir( bill );
             angular.forEach( bill.customers, function(customer) {
                 if( customer.id === bill.customer_id ) {
                     bill.customer = customer;

@@ -21,6 +21,10 @@ app.config( ["$routeProvider", function( $routeProvider) {
             templateUrl: "public/views/bills/edit.html",
             controller: "BillsEditCtrl"
         } ).
+        when( "/bills/:id?for=:for", {
+            templateUrl: "public/views/bills/edit.html",
+            controller: "BillsEditCtrl"
+        } ).
         when( "/reservations", {
             templateUrl: "public/views/reservations/index.html",
             controller: "ReservationListCtrl"
