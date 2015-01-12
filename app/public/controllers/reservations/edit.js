@@ -85,6 +85,7 @@ app.controller( "ReservationEditCtrl",
 
             var contained = getById( $scope.selectedRooms, room.id );
             if( !contained ) {
+                room.configuration = "SINGLE";
                 $scope.selectedRooms.push( room );
 
                 //select the item in the listbox right away to avoid empty item
